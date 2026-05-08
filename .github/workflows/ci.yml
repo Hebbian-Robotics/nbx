@@ -22,14 +22,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Matrix tests the current pin and the previous patch release.
-        # Bumps may lag the schema bump by 1-2 days because the Docker image
-        # at `netboxcommunity/netbox:vX.Y.Z` is built downstream of the
-        # GitHub tag. Advance to [<current pin>, <previous>] once the image
-        # is on Docker Hub.
+        # Tests only the current pin's NetBox release. Cross-minor coverage
+        # is best-effort per the runtime version probe in `src/client.rs`,
+        # so running the strict integration suite (which jq-asserts response
+        # shapes) against a server outside `major.minor` produces noise
+        # rather than signal — the probe's own stderr warning pollutes the
+        # captured-stderr tests, and shape divergence between minors trips
+        # the drift audit. The `Schema drift` workflow watches upstream
+        # 4.x.y separately. Add patch entries (e.g. v4.6.1) within the
+        # pinned major.minor when they're available on Docker Hub.
         netbox-version:
           - v4.6.0
-          - v4.5.10
     env:
       NETBOX_VERSION: ${{ matrix.netbox-version }}
     steps:
