@@ -1,0 +1,13 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 166
+expression: rendered
+---
++----+-----------+---------+
+| id | name      | status  |
++==========================+
+| 1  | srv-db-01 | active  |
+|----+-----------+---------|
+| 2  | srv-db-02 | planned |
++----+-----------+---------+
+count: 2

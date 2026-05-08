@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Skills frontmatter lint
+        run: cargo test --test skills_lint
+      - run: cargo test --workspace --all-features
+
+  netbox-integration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Matrix tests the current pin and the previous patch release.
+        # Bumps may lag the schema bump by 1-2 days because the Docker image
+        # at `netboxcommunity/netbox:vX.Y.Z` is built downstream of the
+        # GitHub tag. Advance to [<current pin>, <previous>] once the image
+        # is on Docker Hub.
+        netbox-version:
+          - v4.5.10
+          - v4.5.9
+    env:
+      NETBOX_VERSION: ${{ matrix.netbox-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: sudo apt-get update && sudo apt-get install -y jq
+      - run: tests/integration/run.sh
+
+  # Verifies the v0.1 plan's "install on a clean machine" check: confirms
+  # `cargo install --path . --locked` produces a self-contained binary that
+  # runs from outside the source tree (no missing transitive deps, no path
+  # assumptions baked into the binary).
+  clean-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo install --path . --locked
+      - name: Run the installed binary from /tmp
+        run: |
+          cd /tmp
+          nbx --version
+          nbx --help > /dev/null
+          nbx config --help > /dev/null
+          nbx dcim sites create --help > /dev/null

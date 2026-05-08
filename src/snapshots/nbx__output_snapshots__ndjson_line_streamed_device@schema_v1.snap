@@ -1,0 +1,6 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 149
+expression: line
+---
+{"data":{"id":1,"name":"srv-db-01"},"nbxVersion":"[redacted]","schemaVersion":1}

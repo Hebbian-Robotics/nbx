@@ -1,0 +1,42 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 198
+expression: envelope
+---
+{
+  "count": 2,
+  "nbxVersion": "[redacted]",
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "device": {
+        "id": 7,
+        "name": "srv01"
+      },
+      "enabled": true,
+      "id": 91,
+      "mgmt_only": false,
+      "name": "Ethernet1",
+      "type": {
+        "label": "10GBASE-T (10GE)",
+        "value": "10gbase-t"
+      }
+    },
+    {
+      "device": {
+        "id": 7,
+        "name": "srv01"
+      },
+      "enabled": false,
+      "id": 92,
+      "mgmt_only": false,
+      "name": "Ethernet2",
+      "type": {
+        "label": "10GBASE-T (10GE)",
+        "value": "10gbase-t"
+      }
+    }
+  ],
+  "schemaVersion": 1
+}

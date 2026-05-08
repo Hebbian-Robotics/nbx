@@ -1,0 +1,67 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 136
+expression: envelopes
+---
+[
+  {
+    "error": {
+      "code": "not_found",
+      "detail": {
+        "lookup": "srv-db-07",
+        "resource": "dcim.device"
+      },
+      "message": "device not found: srv-db-07"
+    },
+    "nbxVersion": "[redacted]",
+    "schemaVersion": 1
+  },
+  {
+    "error": {
+      "code": "auth_failed",
+      "detail": {
+        "status": 401
+      },
+      "message": "NetBox authentication failed"
+    },
+    "nbxVersion": "[redacted]",
+    "schemaVersion": 1
+  },
+  {
+    "error": {
+      "code": "validation_error",
+      "detail": {
+        "response": {
+          "name": [
+            "This field is required."
+          ]
+        },
+        "status": 422
+      },
+      "message": "NetBox validation failed"
+    },
+    "nbxVersion": "[redacted]",
+    "schemaVersion": 1
+  },
+  {
+    "error": {
+      "code": "stream_error",
+      "detail": {
+        "resource": "dcim.devices",
+        "source": "request failed"
+      },
+      "message": "failed while streaming paginated results"
+    },
+    "nbxVersion": "[redacted]",
+    "schemaVersion": 1
+  },
+  {
+    "error": {
+      "code": "general",
+      "detail": {},
+      "message": "NetBox request failed"
+    },
+    "nbxVersion": "[redacted]",
+    "schemaVersion": 1
+  }
+]

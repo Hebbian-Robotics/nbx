@@ -1,0 +1,17 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 69
+expression: envelope
+---
+{
+  "data": {
+    "id": 7,
+    "name": "srv-db-07",
+    "status": {
+      "label": "Active",
+      "value": "active"
+    }
+  },
+  "nbxVersion": "[redacted]",
+  "schemaVersion": 1
+}

@@ -1,0 +1,43 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 219
+expression: envelope
+---
+{
+  "data": {
+    "device": {
+      "id": 7,
+      "name": "srv01"
+    },
+    "enabled": true,
+    "id": 91,
+    "mode": {
+      "label": "Tagged",
+      "value": "tagged"
+    },
+    "name": "Ethernet1",
+    "tagged_vlans": [
+      {
+        "id": 200,
+        "name": "dev",
+        "vid": 200
+      },
+      {
+        "id": 201,
+        "name": "prod",
+        "vid": 201
+      }
+    ],
+    "type": {
+      "label": "10GBASE-T (10GE)",
+      "value": "10gbase-t"
+    },
+    "untagged_vlan": {
+      "id": 100,
+      "name": "mgmt",
+      "vid": 100
+    }
+  },
+  "nbxVersion": "[redacted]",
+  "schemaVersion": 1
+}

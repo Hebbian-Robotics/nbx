@@ -1,0 +1,45 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 239
+expression: envelope
+---
+{
+  "data": [
+    [
+      {
+        "id": 91,
+        "name": "Ethernet1",
+        "object_type": "dcim.interface"
+      },
+      {
+        "id": 5,
+        "label": "patch-7",
+        "object_type": "dcim.cable"
+      },
+      {
+        "id": 12,
+        "name": "FrontPort1",
+        "object_type": "dcim.frontport"
+      }
+    ],
+    [
+      {
+        "id": 13,
+        "name": "RearPort1",
+        "object_type": "dcim.rearport"
+      },
+      {
+        "id": 6,
+        "label": "trunk-3",
+        "object_type": "dcim.cable"
+      },
+      {
+        "id": 200,
+        "name": "Ethernet48",
+        "object_type": "dcim.interface"
+      }
+    ]
+  ],
+  "nbxVersion": "[redacted]",
+  "schemaVersion": 1
+}

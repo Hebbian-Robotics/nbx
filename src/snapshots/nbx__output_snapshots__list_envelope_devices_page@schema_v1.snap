@@ -1,0 +1,22 @@
+---
+source: src/output_snapshots.rs
+assertion_line: 88
+expression: envelope
+---
+{
+  "count": 2,
+  "nbxVersion": "[redacted]",
+  "next": "https://netbox.example/api/dcim/devices/?limit=2&offset=2",
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "name": "srv-db-01"
+    },
+    {
+      "id": 2,
+      "name": "srv-db-02"
+    }
+  ],
+  "schemaVersion": 1
+}

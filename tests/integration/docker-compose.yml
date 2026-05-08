@@ -1,0 +1,70 @@
+services:
+  postgres:
+    # Tracks the version used by the official netbox-community/netbox-docker
+    # reference compose. NetBox 4.5 supports PostgreSQL 14+ but we pin to 18
+    # to match the upstream test matrix.
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: netbox
+      POSTGRES_USER: netbox
+      POSTGRES_PASSWORD: netbox
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U netbox"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Valkey is the OSS fork of Redis (post-license change) and is what the
+  # official netbox-docker reference compose now uses. The wire protocol is
+  # identical to Redis, so NetBox's REDIS_HOST configuration is unchanged.
+  redis:
+    image: valkey/valkey:9.0-alpine
+    command: ["valkey-server", "--requirepass", "netbox"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-a", "netbox", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis-cache:
+    image: valkey/valkey:9.0-alpine
+    command: ["valkey-server", "--requirepass", "netbox"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-a", "netbox", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  netbox:
+    image: netboxcommunity/netbox:${NETBOX_VERSION:-v4.5.10}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      redis-cache:
+        condition: service_healthy
+    ports:
+      - "8000:8080"
+    environment:
+      ALLOWED_HOSTS: "*"
+      DB_HOST: postgres
+      DB_NAME: netbox
+      DB_USER: netbox
+      DB_PASSWORD: netbox
+      REDIS_HOST: redis
+      REDIS_PASSWORD: netbox
+      REDIS_CACHE_HOST: redis-cache
+      REDIS_CACHE_PASSWORD: netbox
+      API_TOKEN_PEPPER_1: "integration-api-token-pepper-0123456789abcdefghijklmnopqrstuvwxyz"
+      SECRET_KEY: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz"
+      SUPERUSER_NAME: admin
+      SUPERUSER_EMAIL: admin@example.com
+      SUPERUSER_PASSWORD: admin
+      SKIP_STARTUP_SCRIPTS: "false"
+      SKIP_SUPERUSER: "false"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/login/ >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 60
