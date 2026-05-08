@@ -300,10 +300,10 @@ mod tests {
 
     #[test]
     fn parses_major_minor_for_pinned_target() {
-        assert_eq!(major_minor(TARGET_NETBOX_VERSION), Some((4, 5)));
-        assert_eq!(major_minor("v4.6.0"), Some((4, 6)));
-        assert!(same_major_minor("4.5.7", TARGET_NETBOX_VERSION));
-        assert!(!same_major_minor("4.6.0", TARGET_NETBOX_VERSION));
+        assert_eq!(major_minor(TARGET_NETBOX_VERSION), Some((4, 6)));
+        assert_eq!(major_minor("v4.5.10"), Some((4, 5)));
+        assert!(same_major_minor("4.6.5", TARGET_NETBOX_VERSION));
+        assert!(!same_major_minor("4.5.10", TARGET_NETBOX_VERSION));
     }
 
     #[test]

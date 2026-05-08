@@ -1,28 +1,28 @@
 # NetBox Schema Pin
 
-Target NetBox release: `v4.5.10`
+Target NetBox release: `v4.6.0`
 
-Pinned schema: `schema/netbox-4.5.10.json`
+Pinned schema: `schema/netbox-4.6.0.json`
 
 Observed OpenAPI version: `3.0.3`
 
 Fetch command:
 
 ```sh
-curl -fsSL 'https://raw.githubusercontent.com/netbox-community/netbox/v4.5.10/contrib/openapi.json' -o schema/netbox-4.5.10.json
+curl -fsSL 'https://raw.githubusercontent.com/netbox-community/netbox/v4.6.0/contrib/openapi.json' -o schema/netbox-4.6.0.json
 ```
 
 SHA-256:
 
 ```text
-2e1e2ac57e18bcf24869f8fac8997749c5b988d1ea83f0fcf423f576d19987c6
+7d2d309aeb3e2187f06fecfeaa99a4b2969df91618e4cce869de7076f8c3fd1d
 ```
 
-This file is the official OpenAPI artifact committed in the NetBox `v4.5.10` tag. Retargeting NetBox requires updating this schema, regenerating metadata, and reviewing generated diffs.
+This file is the official OpenAPI artifact committed in the NetBox `v4.6.0` tag. Retargeting NetBox requires updating this schema, regenerating metadata, and reviewing generated diffs.
 
 ## Bumping to a new NetBox release
 
-`nbx`'s crate version tracks NetBox's release version (e.g., `nbx 4.5.10` is built from `netbox-community/netbox` tag `v4.5.10`). To target a new NetBox release `vX.Y.Z`:
+`nbx`'s crate version tracks NetBox's release version (e.g., `nbx 4.6.0` is built from `netbox-community/netbox` tag `v4.6.0`). To target a new NetBox release `vX.Y.Z`:
 
 1. **Drop in the new schema and remove the old.**
 
@@ -95,4 +95,4 @@ This file is the official OpenAPI artifact committed in the NetBox `v4.5.10` tag
    - any user-visible flag changes (added enum values, new required fields, renamed flags),
    - integration-suite results.
 
-The `Schema drift` GitHub Actions workflow (`.github/workflows/schema-drift.yml`) opens an issue weekly when a newer NetBox 4.5.x release diverges from the pin, so you can usually time the bump to that nudge.
+The `Schema drift` GitHub Actions workflow (`.github/workflows/schema-drift.yml`) opens an issue weekly when a newer NetBox 4.6.x release diverges from the pin, so you can usually time the bump to that nudge.

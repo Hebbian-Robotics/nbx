@@ -6,7 +6,7 @@ Every JSON and NDJSON record includes:
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1
 }
 ```
@@ -15,7 +15,7 @@ Single-object success:
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1,
   "data": {}
 }
@@ -25,7 +25,7 @@ List success:
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1,
   "count": 0,
   "next": null,
@@ -38,7 +38,7 @@ Error:
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1,
   "error": {
     "code": "not_found",

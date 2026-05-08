@@ -10,6 +10,23 @@ agent contract version and is independent of the crate version.
 
 No unreleased changes.
 
+## [4.6.0] — 2026-05-08
+
+### Changed
+
+- Re-pinned to [NetBox v4.6.0](https://github.com/netbox-community/netbox/releases/tag/v4.6.0). New schema at `schema/netbox-4.6.0.json` (SHA-256 `7d2d309aeb3e2187f06fecfeaa99a4b2969df91618e4cce869de7076f8c3fd1d`). CI integration matrix advanced to `[v4.6.0, v4.5.10]`.
+- New typed flags surfaced from upstream additions: `--bundle` on `dcim cables {create,update}` (Cable Bundles), `--group` on `dcim racks {create,update}` (Rack Groups). Both are additive and `Option<u64>`; existing invocations are unaffected.
+- New required fields on nested foreign-key responses: `BriefRole.asn_count`, `BriefIPAddress.nat_outside`. Generated types reflect them; verified live against `netboxcommunity/netbox:v4.6.0`.
+
+### Fixed
+
+- Suppressed spurious "response did not match the pinned schema" stderr warning on every command that nests a brief rack (`dcim devices {get,list}`, `dcim interfaces *`, etc.). Root cause: NetBox's OpenAPI lists `BriefRack.device_count` as required while `BriefRackSerializer` omits the field at runtime. Verified present in both v4.5.10 and v4.6.0 — upstream did not fix it in the minor bump. Reported upstream in [netbox-community/netbox#22154](https://github.com/netbox-community/netbox/issues/22154). nbx's codegen now strips this declaration via `KNOWN_OVER_REQUIRED` in `xtask/codegen` before running typify, so the generated `BriefRack.device_count` is `Option<i64>` and matches the wire shape. The override entry will be removed when the upstream fix lands.
+- Integration suite in `tests/integration/run.sh` now treats any drift warning during the live run as a hard failure, so future upstream regressions of this shape surface in CI rather than silently in operator stderr.
+
+### Notes
+
+- NetBox v4.6.0 introduces Virtual Machine Types, Cable Bundles, Rack Groups, ETag support, and cursor-based pagination at the platform level. Of these, only Cable Bundles and Rack Groups are exposed to existing nbx commands (via the new flags above). The full new surface remains reachable through `nbx raw <method> <path>`.
+
 ## [4.5.10] — 2026-05-06
 
 Initial public release. nbx targets [NetBox v4.5.10](https://github.com/netbox-community/netbox/releases/tag/v4.5.10).

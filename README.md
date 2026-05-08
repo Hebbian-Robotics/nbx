@@ -13,7 +13,7 @@ NetBox already has a broad REST API. `nbx` exists to make that API easier to use
 - Meaningful exit codes (0/1/2/3/4) for branching without parsing stderr.
 - Agent-readable `SKILL.md` files describing each command's purpose, parameters, output, and errors.
 
-Target NetBox release: **v4.5.10**.
+Target NetBox release: **v4.6.0**.
 
 ## Install
 
@@ -141,7 +141,7 @@ Every JSON or NDJSON record carries the envelope documented in [`SCHEMA.md`](./S
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1,
   "data": { "id": 42, "name": "srv-db-07" }
 }
@@ -151,7 +151,7 @@ List responses include the NetBox pagination envelope alongside `nbxVersion` / `
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1,
   "count": 137,
   "next": "https://netbox.example/api/dcim/devices/?limit=50&offset=50",
@@ -168,7 +168,7 @@ Errors are JSON objects with `code`, `message`, and `detail`:
 
 ```json
 {
-  "nbxVersion": "4.5.10",
+  "nbxVersion": "4.6.0",
   "schemaVersion": 1,
   "error": {
     "code": "not_found",
@@ -194,11 +194,11 @@ Errors are JSON objects with `code`, `message`, and `detail`:
 
 `nbx` is intentionally opinionated around the highest-value operational workflows first: DCIM devices/interfaces/cables/sites/racks/reference objects, IPAM prefixes/IP addresses/VLANs/VRFs/reference objects, Extras tags, and Tenancy tenants/groups. The schema-generated resource modules make this surface broad enough for day-to-day work while keeping the CLI predictable.
 
-`nbx` is built against the OpenAPI schema from a single NetBox release (currently `v4.5.10`; see `schema/README.md`). On the first request of each session it probes `/api/status/`. If the running NetBox's `major.minor` doesn't match the pinned target, nbx prints a one-line warning to stderr and continues; behavior outside the pinned `major.minor` is best-effort.
+`nbx` is built against the OpenAPI schema from a single NetBox release (currently `v4.6.0`; see `schema/README.md`). On the first request of each session it probes `/api/status/`. If the running NetBox's `major.minor` doesn't match the pinned target, nbx prints a one-line warning to stderr and continues; behavior outside the pinned `major.minor` is best-effort.
 
 Set `NBX_SKIP_VERSION_CHECK=1` to suppress the probe (useful in CI against many NetBox versions, or when calling `/api/status/` is restricted).
 
-A weekly `Schema drift` GitHub Actions job (`.github/workflows/schema-drift.yml`) compares the pinned schema against the latest NetBox 4.5.x release and opens a tracking issue on diff. Bumping the pin is a deliberate PR documented in `schema/README.md`.
+A weekly `Schema drift` GitHub Actions job (`.github/workflows/schema-drift.yml`) compares the pinned schema against the latest NetBox 4.6.x release and opens a tracking issue on diff. Bumping the pin is a deliberate PR documented in `schema/README.md`.
 
 Use these escape hatches when the typed surface does not cover the exact request you need:
 
@@ -284,7 +284,7 @@ cargo test --workspace --all-features
 
 ### Codegen architecture
 
-Three artifacts are generated from `schema/netbox-4.5.10.json`:
+Three artifacts are generated from `schema/netbox-4.6.0.json`:
 
 - `src/generated/types.rs` — every NetBox component schema, via `typify`. Compile-checked.
 - `src/generated/endpoints.rs` — endpoint metadata (path, method, parameters, request/response refs) for the initial target paths.
@@ -310,9 +310,9 @@ The runtime (HTTP client, auth, retries, output envelope, error model, projectio
 Regenerate:
 
 ```sh
-cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/endpoints.rs
-cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/types.rs
-cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/
+cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/endpoints.rs
+cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/types.rs
+cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/
 ```
 
 `cargo test --workspace` fails if any committed file under `src/generated/` drifts from what the codegen would produce against the pinned schema. The drift checks live in `xtask/codegen` so a published `cargo install nbx` doesn't pull in the codegen toolchain. A NetBox version bump is a deliberate PR: update `schema/`, regenerate, review the diff, run tests and integration.

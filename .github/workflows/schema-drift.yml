@@ -13,12 +13,12 @@ jobs:
   upstream-diff:
     runs-on: ubuntu-latest
     env:
-      PINNED_VERSION: v4.5.10
-      PINNED_SCHEMA_PATH: schema/netbox-4.5.10.json
+      PINNED_VERSION: v4.6.0
+      PINNED_SCHEMA_PATH: schema/netbox-4.6.0.json
     steps:
       - uses: actions/checkout@v4
 
-      - name: Resolve latest NetBox 4.5.x release
+      - name: Resolve latest NetBox 4.6.x release
         id: latest
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,10 +26,10 @@ jobs:
           set -euo pipefail
           latest_tag="$(
             gh api 'repos/netbox-community/netbox/releases?per_page=100' \
-              --jq '[.[] | select(.tag_name | test("^v4\\.5\\.[0-9]+$"))] | first | .tag_name'
+              --jq '[.[] | select(.tag_name | test("^v4\\.6\\.[0-9]+$"))] | first | .tag_name'
           )"
           if [[ -z "$latest_tag" || "$latest_tag" == "null" ]]; then
-            echo "could not resolve latest NetBox 4.5.x release tag" >&2
+            echo "could not resolve latest NetBox 4.6.x release tag" >&2
             exit 1
           fi
           echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
@@ -54,7 +54,7 @@ jobs:
 
           {
             printf 'Pinned: `%s` (`%s`)\n' "$PINNED_VERSION" "$PINNED_SCHEMA_PATH"
-            printf 'Upstream latest 4.5.x: `%s`\n\n' "$tag"
+            printf 'Upstream latest 4.6.x: `%s`\n\n' "$tag"
             printf 'OpenAPI byte diff is non-empty. To inspect locally:\n\n'
             printf '```sh\n'
             printf 'curl -fsSL https://raw.githubusercontent.com/netbox-community/netbox/%s/contrib/openapi.json -o /tmp/upstream.json\n' "$tag"

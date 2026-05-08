@@ -1,12 +1,12 @@
 # Docker Integration
 
-This harness runs `nbx` against `netboxcommunity/netbox:v4.5.10` with Postgres and Redis.
+This harness runs `nbx` against `netboxcommunity/netbox:v4.6.0` with Postgres and Redis.
 
 ```sh
 tests/integration/run.sh
 ```
 
-The script starts Docker Compose, waits for NetBox, seeds minimal fixture data through the REST API, and runs CLI smoke checks against a real NetBox 4.5.10:
+The script starts Docker Compose, waits for NetBox, seeds minimal fixture data through the REST API, and runs CLI smoke checks against a real NetBox 4.6.0:
 
 - env-only auth (`NETBOX_URL` / `NETBOX_TOKEN`)
 - `dcim sites` list/get

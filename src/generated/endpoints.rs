@@ -52,6 +52,34 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
         path: "/api/dcim/cables/",
         parameters: &[
             ParameterDescriptor {
+                name: "bundle",
+                location: "query",
+                required: false,
+                description: Some("Cable bundle (name)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "bundle__n",
+                location: "query",
+                required: false,
+                description: Some("Cable bundle (name)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "bundle_id",
+                location: "query",
+                required: false,
+                description: Some("Cable bundle (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "bundle_id__n",
+                location: "query",
+                required: false,
+                description: Some("Cable bundle (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "circuittermination_id",
                 location: "query",
                 required: false,
@@ -917,6 +945,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -2034,6 +2069,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -3578,6 +3620,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -6063,6 +6112,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "status",
                 location: "query",
                 required: false,
@@ -8454,6 +8510,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -10348,6 +10411,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "status",
                 location: "query",
                 required: false,
@@ -11437,6 +11507,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "status",
                 location: "query",
                 required: false,
@@ -12295,6 +12372,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -13069,6 +13153,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -13777,6 +13868,34 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "group",
+                location: "query",
+                required: false,
+                description: Some("Group (slug)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "group__n",
+                location: "query",
+                required: false,
+                description: Some("Group (slug)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "group_id",
+                location: "query",
+                required: false,
+                description: Some("Group (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "group_id__n",
+                location: "query",
+                required: false,
+                description: Some("Group (ID)"),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -14680,6 +14799,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: Some("Site (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -15919,6 +16045,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -16683,6 +16816,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -17667,6 +17807,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -18696,6 +18843,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "updated_by_request",
                 location: "query",
                 required: false,
@@ -19334,6 +19488,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: Some("RIR (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -20318,6 +20479,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: Some("Application Service (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -21438,6 +21606,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "status",
                 location: "query",
                 required: false,
@@ -22478,6 +22653,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -23147,6 +23329,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -23809,6 +23998,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "rack_group",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "region",
                 location: "query",
                 required: false,
@@ -23984,6 +24180,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -24065,6 +24268,55 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: Some("Tenant (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids__empty",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids__gt",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids__gte",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids__lt",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids__lte",
+                location: "query",
+                required: false,
+                description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "total_vlan_ids__n",
+                location: "query",
+                required: false,
+                description: None,
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -24965,6 +25217,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: Some("Site (ID)"),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {
@@ -25903,6 +26162,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -26697,6 +26963,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 schema_refs: &[],
             },
             ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
                 name: "tag",
                 location: "query",
                 required: false,
@@ -27433,6 +27706,13 @@ pub const ENDPOINTS: &[EndpointDescriptor] = &[
                 location: "query",
                 required: false,
                 description: None,
+                schema_refs: &[],
+            },
+            ParameterDescriptor {
+                name: "start",
+                location: "query",
+                required: false,
+                description: Some("Cursor-based pagination: return results with pk >= start, ordered by pk. Mutually exclusive with offset."),
                 schema_refs: &[],
             },
             ParameterDescriptor {

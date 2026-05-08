@@ -500,7 +500,7 @@ pub fn render_resource_modules(schema_text: &str) -> Result<Vec<(String, String)
 
 fn render_resource_aggregator() -> String {
     let mut out = String::from(
-        "// AUTO-GENERATED. Run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/`.\n\n",
+        "// AUTO-GENERATED. Run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/`.\n\n",
     );
     for spec in GENERATED_RESOURCES {
         let module = spec.module_file.trim_end_matches(".rs");
@@ -822,10 +822,10 @@ fn render_one_resource_module(
     let properties = resolve_properties(spec, request_schema_value)?;
 
     let mut out = String::new();
-    out.push_str("// AUTO-GENERATED. Source: schema/netbox-4.5.10.json :: ");
+    out.push_str("// AUTO-GENERATED. Source: schema/netbox-4.6.0.json :: ");
     out.push_str(spec.request_schema);
     out.push_str(
-        "\n// Run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/` to regenerate.\n\n",
+        "\n// Run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/` to regenerate.\n\n",
     );
 
     let has_bool_field = properties
@@ -1613,6 +1613,7 @@ pub fn render_typify_types(schema_text: &str) -> Result<String> {
     let mut definitions = schemars::Map::new();
     for (schema_name, schema_value) in schemas {
         let mut converted_schema = schema_value.clone();
+        strip_known_over_required_field(schema_name, &mut converted_schema);
         normalize_openapi_schema(&mut converted_schema);
         let schema = serde_json::from_value::<schemars::schema::Schema>(converted_schema)
             .with_context(|| {
@@ -1643,6 +1644,37 @@ pub fn render_typify_types(schema_text: &str) -> Result<String> {
     );
     generated_source.push_str(&prettyplease::unparse(&syntax_tree));
     Ok(generated_source)
+}
+
+/// `Brief*` schemas where `NetBox`'s `OpenAPI` lists an aggregate field as
+/// required while the runtime brief serializer omits it. Each entry is
+/// verified by `tests/integration/run.sh`: a missing override surfaces as a
+/// response-drift warning during the live suite. Track upstream fixes in
+/// `CHANGELOG.md` and remove entries when a `NetBox` release stops emitting
+/// the bad declaration — `known_over_required_overrides_target_real_schemas`
+/// catches silent renames or upstream fixes that would make an entry a no-op.
+const KNOWN_OVER_REQUIRED: &[(&str, &str)] = &[
+    // Confirmed against NetBox v4.5.10 and v4.6.0: BriefRackSerializer omits
+    // device_count at runtime even though OpenAPI declares it required.
+    // Upstream tracking issue: netbox-community/netbox#22154.
+    ("BriefRack", "device_count"),
+];
+
+/// Strip entries listed in [`KNOWN_OVER_REQUIRED`] from a component schema's
+/// `required` array. Called per-component before [`normalize_openapi_schema`]
+/// so typify generates `Option<...>` for the affected field.
+fn strip_known_over_required_field(component_schema_name: &str, schema_value: &mut Value) {
+    let Some(required_array) = schema_value
+        .get_mut("required")
+        .and_then(Value::as_array_mut)
+    else {
+        return;
+    };
+    for (target_schema_name, bad_required_field) in KNOWN_OVER_REQUIRED {
+        if component_schema_name == *target_schema_name {
+            required_array.retain(|value| value.as_str() != Some(*bad_required_field));
+        }
+    }
 }
 
 fn normalize_openapi_schema(value: &mut Value) {
@@ -2117,7 +2149,7 @@ mod tests {
 
     #[test]
     fn extracts_v0_1_metadata_from_pinned_netbox_schema() {
-        let schema_text = include_str!("../../../schema/netbox-4.5.10.json");
+        let schema_text = include_str!("../../../schema/netbox-4.6.0.json");
         let metadata = extract_endpoint_metadata(schema_text).expect("schema should parse");
         let target_endpoint_metadata =
             filter_endpoint_metadata(&metadata.endpoints, V0_1_TARGET_ENDPOINT_PATHS)
@@ -2158,6 +2190,39 @@ mod tests {
         );
     }
 
+    /// Every entry in [`KNOWN_OVER_REQUIRED`] must still target a real schema
+    /// in the pinned spec, with the bad field still listed as required. If a
+    /// future `NetBox` release renames the schema (`BriefRack` → `RackBrief`)
+    /// or fixes the declaration upstream, the override silently becomes a
+    /// no-op — this test fails first so the entry can be removed (fix landed)
+    /// or updated (rename) deliberately rather than rotting in the table.
+    #[test]
+    fn known_over_required_overrides_target_real_schemas() {
+        let schema_text = include_str!("../../../schema/netbox-4.6.0.json");
+        let openapi_value: Value = serde_json::from_str(schema_text).expect("schema should parse");
+        for (target_schema_name, bad_required_field) in KNOWN_OVER_REQUIRED {
+            let pointer = format!("/components/schemas/{target_schema_name}/required");
+            let required_array = openapi_value
+                .pointer(&pointer)
+                .and_then(Value::as_array)
+                .unwrap_or_else(|| {
+                    panic!(
+                        "KNOWN_OVER_REQUIRED entry ({target_schema_name}, {bad_required_field}) \
+                         no longer points at a real schema with a `required` array — has the \
+                         schema been renamed or fixed upstream? Update or remove the entry."
+                    )
+                });
+            assert!(
+                required_array
+                    .iter()
+                    .any(|value| value.as_str() == Some(*bad_required_field)),
+                "KNOWN_OVER_REQUIRED entry ({target_schema_name}, {bad_required_field}) is a \
+                 no-op — the pinned schema no longer lists {bad_required_field} as required on \
+                 {target_schema_name}. Remove the entry."
+            );
+        }
+    }
+
     /// Every entry in [`FK_RESOLVERS`] must point at a real `NetBox` endpoint
     /// whose GET operation accepts the declared lookup field as a query
     /// parameter. Without this guard a `NetBox` release that renames an
@@ -2166,7 +2231,7 @@ mod tests {
     /// still succeed but `cargo run -- ...` would 404 at runtime.
     #[test]
     fn fk_resolvers_match_pinned_schema() {
-        let schema_text = include_str!("../../../schema/netbox-4.5.10.json");
+        let schema_text = include_str!("../../../schema/netbox-4.6.0.json");
         let metadata = extract_endpoint_metadata(schema_text).expect("schema should parse");
 
         for (brief_schema, api_path, lookup_field) in FK_RESOLVERS {
@@ -2213,7 +2278,7 @@ mod tests {
 
     #[test]
     fn endpoints_rs_matches_pinned_schema() {
-        let schema_text = include_str!("../../../schema/netbox-4.5.10.json");
+        let schema_text = include_str!("../../../schema/netbox-4.6.0.json");
         let committed = include_str!("../../../src/generated/endpoints.rs");
 
         let metadata = extract_endpoint_metadata(schema_text).expect("pinned schema should parse");
@@ -2225,13 +2290,13 @@ mod tests {
         assert_eq!(
             committed, regenerated,
             "src/generated/endpoints.rs is stale; \
-             run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/endpoints.rs`"
+             run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/endpoints.rs`"
         );
     }
 
     #[test]
     fn types_rs_matches_pinned_schema() {
-        let schema_text = include_str!("../../../schema/netbox-4.5.10.json");
+        let schema_text = include_str!("../../../schema/netbox-4.6.0.json");
         let committed = include_str!("../../../src/generated/types.rs");
 
         let regenerated =
@@ -2240,7 +2305,7 @@ mod tests {
         assert_eq!(
             committed, regenerated,
             "src/generated/types.rs is stale; \
-             run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/types.rs`"
+             run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/types.rs`"
         );
     }
 
@@ -2248,7 +2313,7 @@ mod tests {
     fn resource_modules_match_pinned_schema() {
         use std::path::Path;
 
-        let schema_text = include_str!("../../../schema/netbox-4.5.10.json");
+        let schema_text = include_str!("../../../schema/netbox-4.6.0.json");
         let regenerated_outputs =
             render_resource_modules(schema_text).expect("resource modules should render");
 
@@ -2264,7 +2329,7 @@ mod tests {
             let committed = std::fs::read_to_string(&committed_path).unwrap_or_else(|error| {
                 panic!(
                     "failed to read {}: {error}; run `cargo run -p nbx-codegen -- \
-                     schema/netbox-4.5.10.json src/generated/resources/`",
+                     schema/netbox-4.6.0.json src/generated/resources/`",
                     committed_path.display()
                 )
             });
@@ -2272,7 +2337,7 @@ mod tests {
                 &committed,
                 regenerated,
                 "{} is stale; run `cargo run -p nbx-codegen -- \
-                 schema/netbox-4.5.10.json src/generated/resources/`",
+                 schema/netbox-4.6.0.json src/generated/resources/`",
                 committed_path.display()
             );
         }

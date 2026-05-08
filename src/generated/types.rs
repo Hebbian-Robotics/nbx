@@ -879,6 +879,20 @@ for AggregateRequestTenant {
 ///        }
 ///      ]
 ///    },
+///    "role": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRole"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "site_count": {
 ///      "type": "integer",
 ///      "format": "int64"
@@ -937,6 +951,8 @@ pub struct Asn {
     pub provider_count: i64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rir: ::std::option::Option<BriefRir>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<BriefRole>,
     pub site_count: i64,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub sites: ::std::vec::Vec<AsnSite>,
@@ -1987,6 +2003,34 @@ impl<'de> ::serde::Deserialize<'de> for AsnRangeSlug {
 ///        }
 ///      ]
 ///    },
+///    "role": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefRoleRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "sites": {
 ///      "type": "array",
 ///      "items": {
@@ -2045,6 +2089,8 @@ pub struct AsnRequest {
     pub owner: ::std::option::Option<AsnRequestOwner>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rir: ::std::option::Option<AsnRequestRir>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<AsnRequestRole>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub sites: ::std::vec::Vec<i64>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -2209,6 +2255,50 @@ impl ::std::convert::From<i64> for AsnRequestRir {
 }
 impl ::std::convert::From<::std::option::Option<BriefRirRequest>> for AsnRequestRir {
     fn from(value: ::std::option::Option<BriefRirRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AsnRequestRole`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRoleRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum AsnRequestRole {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefRoleRequest>),
+}
+impl ::std::convert::From<i64> for AsnRequestRole {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefRoleRequest>> for AsnRequestRole {
+    fn from(value: ::std::option::Option<BriefRoleRequest>) -> Self {
         Self::Variant1(value)
     }
 }
@@ -3796,6 +3886,377 @@ pub struct BriefCable {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<BriefCableLabel>,
     pub url: ::std::string::String,
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "display",
+///    "id",
+///    "name",
+///    "url"
+///  ],
+///  "properties": {
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "display": {
+///      "type": "string"
+///    },
+///    "id": {
+///      "type": "integer"
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100
+///    },
+///    "url": {
+///      "type": "string",
+///      "format": "uri"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BriefCableBundle {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<BriefCableBundleDescription>,
+    pub display: ::std::string::String,
+    pub id: i64,
+    pub name: BriefCableBundleName,
+    pub url: ::std::string::String,
+}
+///`BriefCableBundleDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefCableBundleDescription(::std::string::String);
+impl ::std::ops::Deref for BriefCableBundleDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefCableBundleDescription> for ::std::string::String {
+    fn from(value: BriefCableBundleDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefCableBundleDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefCableBundleDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefCableBundleDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefCableBundleDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefCableBundleDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefCableBundleName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefCableBundleName(::std::string::String);
+impl ::std::ops::Deref for BriefCableBundleName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefCableBundleName> for ::std::string::String {
+    fn from(value: BriefCableBundleName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefCableBundleName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefCableBundleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefCableBundleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefCableBundleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefCableBundleName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "name"
+///  ],
+///  "properties": {
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BriefCableBundleRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<BriefCableBundleRequestDescription>,
+    pub name: BriefCableBundleRequestName,
+}
+///`BriefCableBundleRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefCableBundleRequestDescription(::std::string::String);
+impl ::std::ops::Deref for BriefCableBundleRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefCableBundleRequestDescription> for ::std::string::String {
+    fn from(value: BriefCableBundleRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefCableBundleRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefCableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for BriefCableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for BriefCableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefCableBundleRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefCableBundleRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefCableBundleRequestName(::std::string::String);
+impl ::std::ops::Deref for BriefCableBundleRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefCableBundleRequestName> for ::std::string::String {
+    fn from(value: BriefCableBundleRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefCableBundleRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefCableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefCableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefCableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefCableBundleRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///`BriefCableDescription`
 ///
@@ -12438,6 +12899,7 @@ impl<'de> ::serde::Deserialize<'de> for BriefInventoryItemRoleSlug {
 ///    "display",
 ///    "family",
 ///    "id",
+///    "nat_outside",
 ///    "url"
 ///  ],
 ///  "properties": {
@@ -12466,6 +12928,26 @@ impl<'de> ::serde::Deserialize<'de> for BriefInventoryItemRoleSlug {
 ///    "id": {
 ///      "type": "integer"
 ///    },
+///    "nat_inside": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/NestedIPAddress"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "nat_outside": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedIPAddress"
+///      }
+///    },
 ///    "url": {
 ///      "type": "string",
 ///      "format": "uri"
@@ -12482,6 +12964,9 @@ pub struct BriefIpAddress {
     pub display: ::std::string::String,
     pub family: BriefIpAddressFamily,
     pub id: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub nat_inside: ::std::option::Option<NestedIpAddress>,
+    pub nat_outside: ::std::vec::Vec<NestedIpAddress>,
     pub url: ::std::string::String,
 }
 ///`BriefIpAddressDescription`
@@ -12610,6 +13095,20 @@ impl ::std::default::Default for BriefIpAddressFamily {
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
+///    },
+///    "nat_inside": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/NestedIPAddressRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    }
 ///  }
 ///}
@@ -12620,6 +13119,8 @@ pub struct BriefIpAddressRequest {
     pub address: BriefIpAddressRequestAddress,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<BriefIpAddressRequestDescription>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub nat_inside: ::std::option::Option<NestedIpAddressRequest>,
 }
 ///`BriefIpAddressRequestAddress`
 ///
@@ -20642,7 +21143,6 @@ impl<'de> ::serde::Deserialize<'de> for BriefProviderSlug {
 ///  "description": "Base serializer class for models inheriting from PrimaryModel.",
 ///  "type": "object",
 ///  "required": [
-///    "device_count",
 ///    "display",
 ///    "id",
 ///    "name",
@@ -20679,7 +21179,8 @@ impl<'de> ::serde::Deserialize<'de> for BriefProviderSlug {
 pub struct BriefRack {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<BriefRackDescription>,
-    pub device_count: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub device_count: ::std::option::Option<i64>,
     pub display: ::std::string::String,
     pub id: i64,
     pub name: BriefRackName,
@@ -20746,6 +21247,558 @@ impl ::std::convert::TryFrom<::std::string::String> for BriefRackDescription {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for BriefRackDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from OrganizationalModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
+///  "type": "object",
+///  "required": [
+///    "display",
+///    "id",
+///    "name",
+///    "rack_count",
+///    "slug",
+///    "url"
+///  ],
+///  "properties": {
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "display": {
+///      "type": "string"
+///    },
+///    "id": {
+///      "type": "integer"
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100
+///    },
+///    "rack_count": {
+///      "type": "integer",
+///      "format": "int64"
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "url": {
+///      "type": "string",
+///      "format": "uri"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BriefRackGroup {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<BriefRackGroupDescription>,
+    pub display: ::std::string::String,
+    pub id: i64,
+    pub name: BriefRackGroupName,
+    pub rack_count: i64,
+    pub slug: BriefRackGroupSlug,
+    pub url: ::std::string::String,
+}
+///`BriefRackGroupDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefRackGroupDescription(::std::string::String);
+impl ::std::ops::Deref for BriefRackGroupDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefRackGroupDescription> for ::std::string::String {
+    fn from(value: BriefRackGroupDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefRackGroupDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefRackGroupDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefRackGroupDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefRackGroupDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefRackGroupDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefRackGroupName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefRackGroupName(::std::string::String);
+impl ::std::ops::Deref for BriefRackGroupName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefRackGroupName> for ::std::string::String {
+    fn from(value: BriefRackGroupName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefRackGroupName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefRackGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefRackGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefRackGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefRackGroupName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from OrganizationalModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
+///  "type": "object",
+///  "required": [
+///    "name",
+///    "slug"
+///  ],
+///  "properties": {
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BriefRackGroupRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<BriefRackGroupRequestDescription>,
+    pub name: BriefRackGroupRequestName,
+    pub slug: BriefRackGroupRequestSlug,
+}
+///`BriefRackGroupRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefRackGroupRequestDescription(::std::string::String);
+impl ::std::ops::Deref for BriefRackGroupRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefRackGroupRequestDescription> for ::std::string::String {
+    fn from(value: BriefRackGroupRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefRackGroupRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefRackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for BriefRackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for BriefRackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefRackGroupRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefRackGroupRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefRackGroupRequestName(::std::string::String);
+impl ::std::ops::Deref for BriefRackGroupRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefRackGroupRequestName> for ::std::string::String {
+    fn from(value: BriefRackGroupRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefRackGroupRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefRackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefRackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefRackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefRackGroupRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefRackGroupRequestSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefRackGroupRequestSlug(::std::string::String);
+impl ::std::ops::Deref for BriefRackGroupRequestSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefRackGroupRequestSlug> for ::std::string::String {
+    fn from(value: BriefRackGroupRequestSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefRackGroupRequestSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefRackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefRackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefRackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefRackGroupRequestSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefRackGroupSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefRackGroupSlug(::std::string::String);
+impl ::std::ops::Deref for BriefRackGroupSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefRackGroupSlug> for ::std::string::String {
+    fn from(value: BriefRackGroupSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefRackGroupSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefRackGroupSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefRackGroupSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefRackGroupSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefRackGroupSlug {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -23276,6 +24329,7 @@ impl<'de> ::serde::Deserialize<'de> for BriefRirSlug {
 ///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
 ///  "type": "object",
 ///  "required": [
+///    "asn_count",
 ///    "display",
 ///    "id",
 ///    "name",
@@ -23285,6 +24339,10 @@ impl<'de> ::serde::Deserialize<'de> for BriefRirSlug {
 ///    "vlan_count"
 ///  ],
 ///  "properties": {
+///    "asn_count": {
+///      "type": "integer",
+///      "format": "int64"
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -23322,6 +24380,7 @@ impl<'de> ::serde::Deserialize<'de> for BriefRirSlug {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct BriefRole {
+    pub asn_count: i64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<BriefRoleDescription>,
     pub display: ::std::string::String,
@@ -29184,6 +30243,559 @@ impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineRequestName {
 ///    "display",
 ///    "id",
 ///    "name",
+///    "slug",
+///    "url"
+///  ],
+///  "properties": {
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "display": {
+///      "type": "string"
+///    },
+///    "id": {
+///      "type": "integer"
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "url": {
+///      "type": "string",
+///      "format": "uri"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BriefVirtualMachineType {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<BriefVirtualMachineTypeDescription>,
+    pub display: ::std::string::String,
+    pub id: i64,
+    pub name: BriefVirtualMachineTypeName,
+    pub slug: BriefVirtualMachineTypeSlug,
+    pub url: ::std::string::String,
+}
+///`BriefVirtualMachineTypeDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefVirtualMachineTypeDescription(::std::string::String);
+impl ::std::ops::Deref for BriefVirtualMachineTypeDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefVirtualMachineTypeDescription> for ::std::string::String {
+    fn from(value: BriefVirtualMachineTypeDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefVirtualMachineTypeDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefVirtualMachineTypeDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for BriefVirtualMachineTypeDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for BriefVirtualMachineTypeDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineTypeDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefVirtualMachineTypeName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefVirtualMachineTypeName(::std::string::String);
+impl ::std::ops::Deref for BriefVirtualMachineTypeName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefVirtualMachineTypeName> for ::std::string::String {
+    fn from(value: BriefVirtualMachineTypeName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefVirtualMachineTypeName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefVirtualMachineTypeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefVirtualMachineTypeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefVirtualMachineTypeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineTypeName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "name",
+///    "slug"
+///  ],
+///  "properties": {
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct BriefVirtualMachineTypeRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<BriefVirtualMachineTypeRequestDescription>,
+    pub name: BriefVirtualMachineTypeRequestName,
+    pub slug: BriefVirtualMachineTypeRequestSlug,
+}
+///`BriefVirtualMachineTypeRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefVirtualMachineTypeRequestDescription(::std::string::String);
+impl ::std::ops::Deref for BriefVirtualMachineTypeRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefVirtualMachineTypeRequestDescription>
+for ::std::string::String {
+    fn from(value: BriefVirtualMachineTypeRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefVirtualMachineTypeRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefVirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for BriefVirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for BriefVirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineTypeRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefVirtualMachineTypeRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefVirtualMachineTypeRequestName(::std::string::String);
+impl ::std::ops::Deref for BriefVirtualMachineTypeRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefVirtualMachineTypeRequestName> for ::std::string::String {
+    fn from(value: BriefVirtualMachineTypeRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefVirtualMachineTypeRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefVirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for BriefVirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for BriefVirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineTypeRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefVirtualMachineTypeRequestSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefVirtualMachineTypeRequestSlug(::std::string::String);
+impl ::std::ops::Deref for BriefVirtualMachineTypeRequestSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefVirtualMachineTypeRequestSlug> for ::std::string::String {
+    fn from(value: BriefVirtualMachineTypeRequestSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefVirtualMachineTypeRequestSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefVirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for BriefVirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for BriefVirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineTypeRequestSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`BriefVirtualMachineTypeSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct BriefVirtualMachineTypeSlug(::std::string::String);
+impl ::std::ops::Deref for BriefVirtualMachineTypeSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<BriefVirtualMachineTypeSlug> for ::std::string::String {
+    fn from(value: BriefVirtualMachineTypeSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for BriefVirtualMachineTypeSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for BriefVirtualMachineTypeSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for BriefVirtualMachineTypeSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for BriefVirtualMachineTypeSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BriefVirtualMachineTypeSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "display",
+///    "id",
+///    "name",
 ///    "url",
 ///    "vid"
 ///  ],
@@ -31491,6 +33103,20 @@ impl<'de> ::serde::Deserialize<'de> for BriefWirelessLanGroupSlug {
 ///        "$ref": "#/definitions/GenericObject"
 ///      }
 ///    },
+///    "bundle": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefCableBundle"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "color": {
 ///      "type": "string",
 ///      "maxLength": 6,
@@ -31666,6 +33292,8 @@ pub struct Cable {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub b_terminations: ::std::vec::Vec<GenericObject>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bundle: ::std::option::Option<BriefCableBundle>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub color: ::std::option::Option<CableColor>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub comments: ::std::option::Option<::std::string::String>,
@@ -31701,6 +33329,542 @@ pub struct Cable {
     )]
     pub type_: ::std::option::Option<::std::string::String>,
     pub url: ::std::string::String,
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "cable_count",
+///    "created",
+///    "display",
+///    "display_url",
+///    "id",
+///    "last_updated",
+///    "name",
+///    "url"
+///  ],
+///  "properties": {
+///    "cable_count": {
+///      "default": 0,
+///      "type": "integer"
+///    },
+///    "comments": {
+///      "type": "string"
+///    },
+///    "created": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "date-time"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "display": {
+///      "type": "string"
+///    },
+///    "display_url": {
+///      "type": "string",
+///      "format": "uri"
+///    },
+///    "id": {
+///      "type": "integer"
+///    },
+///    "last_updated": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "date-time"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwner"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTag"
+///      }
+///    },
+///    "url": {
+///      "type": "string",
+///      "format": "uri"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct CableBundle {
+    pub cable_count: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    pub created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<CableBundleDescription>,
+    pub display: ::std::string::String,
+    pub display_url: ::std::string::String,
+    pub id: i64,
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub name: CableBundleName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<BriefOwner>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTag>,
+    pub url: ::std::string::String,
+}
+///`CableBundleDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CableBundleDescription(::std::string::String);
+impl ::std::ops::Deref for CableBundleDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CableBundleDescription> for ::std::string::String {
+    fn from(value: CableBundleDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CableBundleDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CableBundleDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CableBundleDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CableBundleDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CableBundleDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CableBundleName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CableBundleName(::std::string::String);
+impl ::std::ops::Deref for CableBundleName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CableBundleName> for ::std::string::String {
+    fn from(value: CableBundleName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CableBundleName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CableBundleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CableBundleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CableBundleName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CableBundleName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "name"
+///  ],
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefOwnerRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTagRequest"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct CableBundleRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<CableBundleRequestDescription>,
+    pub name: CableBundleRequestName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<CableBundleRequestOwner>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTagRequest>,
+}
+///`CableBundleRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CableBundleRequestDescription(::std::string::String);
+impl ::std::ops::Deref for CableBundleRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CableBundleRequestDescription> for ::std::string::String {
+    fn from(value: CableBundleRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CableBundleRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CableBundleRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CableBundleRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct CableBundleRequestName(::std::string::String);
+impl ::std::ops::Deref for CableBundleRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CableBundleRequestName> for ::std::string::String {
+    fn from(value: CableBundleRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CableBundleRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CableBundleRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CableBundleRequestOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwnerRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum CableBundleRequestOwner {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefOwnerRequest>),
+}
+impl ::std::convert::From<i64> for CableBundleRequestOwner {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefOwnerRequest>>
+for CableBundleRequestOwner {
+    fn from(value: ::std::option::Option<BriefOwnerRequest>) -> Self {
+        Self::Variant1(value)
+    }
 }
 ///`CableColor`
 ///
@@ -32021,6 +34185,34 @@ impl ::std::default::Default for CableProfile {
 ///        "$ref": "#/definitions/GenericObjectRequest"
 ///      }
 ///    },
+///    "bundle": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefCableBundleRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "color": {
 ///      "type": "string",
 ///      "maxLength": 6,
@@ -32157,6 +34349,8 @@ pub struct CableRequest {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub b_terminations: ::std::vec::Vec<GenericObjectRequest>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bundle: ::std::option::Option<CableRequestBundle>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub color: ::std::option::Option<CableRequestColor>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub comments: ::std::option::Option<::std::string::String>,
@@ -32194,6 +34388,7 @@ impl ::std::default::Default for CableRequest {
         Self {
             a_terminations: Default::default(),
             b_terminations: Default::default(),
+            bundle: Default::default(),
             color: Default::default(),
             comments: Default::default(),
             custom_fields: Default::default(),
@@ -32208,6 +34403,51 @@ impl ::std::default::Default for CableRequest {
             tenant: Default::default(),
             type_: Default::default(),
         }
+    }
+}
+///`CableRequestBundle`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefCableBundleRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum CableRequestBundle {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefCableBundleRequest>),
+}
+impl ::std::convert::From<i64> for CableRequestBundle {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefCableBundleRequest>>
+for CableRequestBundle {
+    fn from(value: ::std::option::Option<BriefCableBundleRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`CableRequestColor`
@@ -40580,6 +42820,10 @@ impl<'de> ::serde::Deserialize<'de> for ConfigContextRequestTagsItem {
 ///        }
 ///      ]
 ///    },
+///    "debug": {
+///      "description": "Enable verbose error output when rendering this template. Not recommended for production use.",
+///      "type": "boolean"
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -40683,6 +42927,9 @@ pub struct ConfigTemplate {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub data_source: ::std::option::Option<BriefDataSource>,
     pub data_synced: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///Enable verbose error output when rendering this template. Not recommended for production use.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub debug: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ConfigTemplateDescription>,
     pub display: ::std::string::String,
@@ -41103,6 +43350,10 @@ impl<'de> ::serde::Deserialize<'de> for ConfigTemplateName {
 ///        }
 ///      ]
 ///    },
+///    "debug": {
+///      "description": "Enable verbose error output when rendering this template. Not recommended for production use.",
+///      "type": "boolean"
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -41191,6 +43442,9 @@ pub struct ConfigTemplateRequest {
     pub auto_sync_enabled: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub data_source: ::std::option::Option<ConfigTemplateRequestDataSource>,
+    ///Enable verbose error output when rendering this template. Not recommended for production use.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub debug: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ConfigTemplateRequestDescription>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -49100,6 +51354,16 @@ impl<'de> ::serde::Deserialize<'de> for CrossConnectId {
 ///      "type": "string",
 ///      "maxLength": 500
 ///    },
+///    "validation_schema": {
+///      "anyOf": [
+///        {
+///          "description": "A JSON schema definition for validating the custom field value"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "weight": {
 ///      "title": "Display weight",
 ///      "description": "Fields with higher weights appear lower in a form.",
@@ -49170,6 +51434,8 @@ pub struct CustomField {
     ///Regular expression to enforce on text field values. Use ^ and $ to force matching of entire string. For example, <code>^[A-Z]{3}$</code> will limit values to exactly three uppercase letters.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub validation_regex: ::std::option::Option<CustomFieldValidationRegex>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub validation_schema: ::std::option::Option<::serde_json::Value>,
     ///Fields with higher weights appear lower in a form.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weight: ::std::option::Option<i64>,
@@ -49204,6 +51470,13 @@ pub struct CustomField {
 ///          "description": "* `IATA` - IATA (Airport codes)\n* `ISO_3166` - ISO 3166 (Country codes)\n* `UN_LOCODE` - UN/LOCODE (Location codes)",
 ///          "type": "string"
 ///        }
+///      }
+///    },
+///    "choice_colors": {
+///      "type": "object",
+///      "additionalProperties": {
+///        "description": "* `blue` - Blue\n* `indigo` - Indigo\n* `purple` - Purple\n* `pink` - Pink\n* `red` - Red\n* `orange` - Orange\n* `yellow` - Yellow\n* `green` - Green\n* `teal` - Teal\n* `cyan` - Cyan\n* `gray` - Gray\n* `black` - Black\n* `white` - White",
+///        "type": "string"
 ///      }
 ///    },
 ///    "choices_count": {
@@ -49288,6 +51561,11 @@ pub struct CustomField {
 pub struct CustomFieldChoiceSet {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub base_choices: ::std::option::Option<CustomFieldChoiceSetBaseChoices>,
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub choice_colors: ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::string::String,
+    >,
     pub choices_count: i64,
     pub created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -49502,6 +51780,13 @@ impl<'de> ::serde::Deserialize<'de> for CustomFieldChoiceSetName {
 ///      "description": "* `IATA` - IATA (Airport codes)\n* `ISO_3166` - ISO 3166 (Country codes)\n* `UN_LOCODE` - UN/LOCODE (Location codes)",
 ///      "type": "string"
 ///    },
+///    "choice_colors": {
+///      "type": "object",
+///      "additionalProperties": {
+///        "description": "* `blue` - Blue\n* `indigo` - Indigo\n* `purple` - Purple\n* `pink` - Pink\n* `red` - Red\n* `orange` - Orange\n* `yellow` - Yellow\n* `green` - Green\n* `teal` - Teal\n* `cyan` - Cyan\n* `gray` - Gray\n* `black` - Black\n* `white` - White",
+///        "type": "string"
+///      }
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -49561,6 +51846,11 @@ pub struct CustomFieldChoiceSetRequest {
     #[doc = "* `IATA` - IATA (Airport codes)\n* `ISO_3166` - ISO 3166 (Country codes)\n* `UN_LOCODE` - UN/LOCODE (Location codes)"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub base_choices: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub choice_colors: ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::string::String,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<CustomFieldChoiceSetRequestDescription>,
     pub extra_choices: ::std::vec::Vec<[::serde_json::Value; 2usize]>,
@@ -50300,6 +52590,16 @@ impl<'de> ::serde::Deserialize<'de> for CustomFieldName {
 ///      "type": "string",
 ///      "maxLength": 500
 ///    },
+///    "validation_schema": {
+///      "anyOf": [
+///        {
+///          "description": "A JSON schema definition for validating the custom field value"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "weight": {
 ///      "title": "Display weight",
 ///      "description": "Fields with higher weights appear lower in a form.",
@@ -50367,6 +52667,8 @@ pub struct CustomFieldRequest {
     ///Regular expression to enforce on text field values. Use ^ and $ to force matching of entire string. For example, <code>^[A-Z]{3}$</code> will limit values to exactly three uppercase letters.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub validation_regex: ::std::option::Option<CustomFieldRequestValidationRegex>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub validation_schema: ::std::option::Option<::serde_json::Value>,
     ///Fields with higher weights appear lower in a form.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weight: ::std::option::Option<i64>,
@@ -53314,6 +55616,7 @@ impl<'de> ::serde::Deserialize<'de> for DeviceAssetTag {
 ///  "description": "Adds an `owner` field for models which have a ForeignKey to users.Owner.",
 ///  "type": "object",
 ///  "required": [
+///    "_occupied",
 ///    "created",
 ///    "device",
 ///    "display",
@@ -53324,6 +55627,10 @@ impl<'de> ::serde::Deserialize<'de> for DeviceAssetTag {
 ///    "url"
 ///  ],
 ///  "properties": {
+///    "_occupied": {
+///      "title": " occupied",
+///      "type": "boolean"
+///    },
 ///    "created": {
 ///      "anyOf": [
 ///        {
@@ -53352,6 +55659,9 @@ impl<'de> ::serde::Deserialize<'de> for DeviceAssetTag {
 ///    "display_url": {
 ///      "type": "string",
 ///      "format": "uri"
+///    },
+///    "enabled": {
+///      "type": "boolean"
 ///    },
 ///    "id": {
 ///      "type": "integer"
@@ -53428,6 +55738,8 @@ pub struct DeviceBay {
     pub device: BriefDevice,
     pub display: ::std::string::String,
     pub display_url: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     pub id: i64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub installed_device: ::std::option::Option<BriefDevice>,
@@ -53436,6 +55748,8 @@ pub struct DeviceBay {
     pub label: ::std::option::Option<DeviceBayLabel>,
     pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub name: DeviceBayName,
+    #[serde(rename = "_occupied")]
+    pub occupied: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<BriefOwner>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -53690,6 +56004,9 @@ impl<'de> ::serde::Deserialize<'de> for DeviceBayName {
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "installed_device": {
 ///      "anyOf": [
 ///        {
@@ -53773,6 +56090,8 @@ pub struct DeviceBayRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<DeviceBayRequestDescription>,
     pub device: DeviceBayRequestDevice,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub installed_device: ::std::option::Option<DeviceBayRequestInstalledDevice>,
     ///Physical label
@@ -54168,6 +56487,9 @@ validation. (DRF does not do this by default; see https://github.com/encode/djan
 ///    "display": {
 ///      "type": "string"
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "id": {
 ///      "type": "integer"
 ///    },
@@ -54207,6 +56529,8 @@ pub struct DeviceBayTemplate {
     pub description: ::std::option::Option<DeviceBayTemplateDescription>,
     pub device_type: BriefDeviceType,
     pub display: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     pub id: i64,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -54462,6 +56786,9 @@ validation. (DRF does not do this by default; see https://github.com/encode/djan
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "label": {
 ///      "description": "Physical label",
 ///      "type": "string",
@@ -54482,6 +56809,8 @@ pub struct DeviceBayTemplateRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<DeviceBayTemplateRequestDescription>,
     pub device_type: DeviceBayTemplateRequestDeviceType,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<DeviceBayTemplateRequestLabel>,
@@ -77872,6 +80201,7 @@ for IpSecProposalRequestOwner {
 ///    "id",
 ///    "job_id",
 ///    "name",
+///    "notifications",
 ///    "object",
 ///    "object_type",
 ///    "status",
@@ -77939,6 +80269,18 @@ for IpSecProposalRequestOwner {
 ///    "name": {
 ///      "type": "string",
 ///      "maxLength": 200
+///    },
+///    "notifications": {
+///      "type": "object",
+///      "properties": {
+///        "label": {
+///          "type": "string"
+///        },
+///        "value": {
+///          "description": "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never",
+///          "type": "string"
+///        }
+///      }
 ///    },
 ///    "object": {
 ///      "anyOf": [
@@ -78035,6 +80377,7 @@ pub struct Job {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub log_entries: ::std::vec::Vec<::serde_json::Value>,
     pub name: JobName,
+    pub notifications: JobNotifications,
     pub object: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub object_id: ::std::option::Option<i64>,
@@ -78120,6 +80463,41 @@ impl<'de> ::serde::Deserialize<'de> for JobName {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`JobNotifications`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "properties": {
+///    "label": {
+///      "type": "string"
+///    },
+///    "value": {
+///      "description": "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never",
+///      "type": "string"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct JobNotifications {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub label: ::std::option::Option<::std::string::String>,
+    #[doc = "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+impl ::std::default::Default for JobNotifications {
+    fn default() -> Self {
+        Self {
+            label: Default::default(),
+            value: Default::default(),
+        }
     }
 }
 ///Name of the queue in which this job was enqueued
@@ -82322,6 +84700,7 @@ impl<'de> ::serde::Deserialize<'de> for ModuleAssetTag {
 ///  "description": "Adds an `owner` field for models which have a ForeignKey to users.Owner.",
 ///  "type": "object",
 ///  "required": [
+///    "_occupied",
 ///    "created",
 ///    "device",
 ///    "display",
@@ -82332,6 +84711,10 @@ impl<'de> ::serde::Deserialize<'de> for ModuleAssetTag {
 ///    "url"
 ///  ],
 ///  "properties": {
+///    "_occupied": {
+///      "title": " occupied",
+///      "type": "boolean"
+///    },
 ///    "created": {
 ///      "anyOf": [
 ///        {
@@ -82360,6 +84743,9 @@ impl<'de> ::serde::Deserialize<'de> for ModuleAssetTag {
 ///    "display_url": {
 ///      "type": "string",
 ///      "format": "uri"
+///    },
+///    "enabled": {
+///      "type": "boolean"
 ///    },
 ///    "id": {
 ///      "type": "integer"
@@ -82455,6 +84841,8 @@ pub struct ModuleBay {
     pub device: BriefDevice,
     pub display: ::std::string::String,
     pub display_url: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     pub id: i64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub installed_module: ::std::option::Option<BriefModule>,
@@ -82465,6 +84853,8 @@ pub struct ModuleBay {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub module: ::std::option::Option<BriefModule>,
     pub name: ModuleBayName,
+    #[serde(rename = "_occupied")]
+    pub occupied: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<BriefOwner>,
     ///Identifier to reference when renaming installed components
@@ -82795,6 +85185,9 @@ impl<'de> ::serde::Deserialize<'de> for ModuleBayPosition {
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "installed_module": {
 ///      "anyOf": [
 ///        {
@@ -82911,6 +85304,8 @@ pub struct ModuleBayRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ModuleBayRequestDescription>,
     pub device: ModuleBayRequestDevice,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub installed_module: ::std::option::Option<ModuleBayRequestInstalledModule>,
     ///Physical label
@@ -83439,6 +85834,9 @@ validation. (DRF does not do this by default; see https://github.com/encode/djan
 ///    "display": {
 ///      "type": "string"
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "id": {
 ///      "type": "integer"
 ///    },
@@ -83498,6 +85896,8 @@ pub struct ModuleBayTemplate {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub device_type: ::std::option::Option<BriefDeviceType>,
     pub display: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     pub id: i64,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -83848,6 +86248,9 @@ validation. (DRF does not do this by default; see https://github.com/encode/djan
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "label": {
 ///      "description": "Physical label",
 ///      "type": "string",
@@ -83902,6 +86305,8 @@ pub struct ModuleBayTemplateRequest {
     pub description: ::std::option::Option<ModuleBayTemplateRequestDescription>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub device_type: ::std::option::Option<ModuleBayTemplateRequestDeviceType>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<ModuleBayTemplateRequestLabel>,
@@ -84389,6 +86794,11 @@ impl<'de> ::serde::Deserialize<'de> for ModuleDescription {
 ///    "module_type"
 ///  ],
 ///  "properties": {
+///    "adopt_components": {
+///      "description": "Adopt already existing components",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "asset_tag": {
 ///      "anyOf": [
 ///        {
@@ -84463,6 +86873,11 @@ impl<'de> ::serde::Deserialize<'de> for ModuleDescription {
 ///        }
 ///      ]
 ///    },
+///    "replicate_components": {
+///      "description": "Automatically populate components associated with this module type (default: true)",
+///      "default": true,
+///      "type": "boolean"
+///    },
 ///    "serial": {
 ///      "title": "Serial number",
 ///      "type": "string",
@@ -84484,6 +86899,9 @@ impl<'de> ::serde::Deserialize<'de> for ModuleDescription {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct ModuleRequest {
+    ///Adopt already existing components
+    #[serde(default)]
+    pub adopt_components: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub asset_tag: ::std::option::Option<ModuleRequestAssetTag>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -84497,6 +86915,9 @@ pub struct ModuleRequest {
     pub module_type: ModuleRequestModuleType,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<ModuleRequestOwner>,
+    ///Automatically populate components associated with this module type (default: true)
+    #[serde(default = "defaults::default_bool::<true>")]
+    pub replicate_components: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub serial: ::std::option::Option<SerialNumber>,
     #[doc = "* `offline` - Offline\n* `active` - Active\n* `planned` - Planned\n* `staged` - Staged\n* `failed` - Failed\n* `decommissioning` - Decommissioning"]
@@ -95139,6 +97560,62 @@ pub struct PaginatedBookmarkList {
     pub previous: ::std::option::Option<::std::string::String>,
     pub results: ::std::vec::Vec<Bookmark>,
 }
+///`PaginatedCableBundleList`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "results"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer"
+///    },
+///    "next": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "uri"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "previous": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "uri"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "results": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/CableBundle"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct PaginatedCableBundleList {
+    pub count: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub next: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub previous: ::std::option::Option<::std::string::String>,
+    pub results: ::std::vec::Vec<CableBundle>,
+}
 ///`PaginatedCableList`
 ///
 /// <details><summary>JSON schema</summary>
@@ -99675,6 +102152,62 @@ pub struct PaginatedProviderNetworkList {
     pub previous: ::std::option::Option<::std::string::String>,
     pub results: ::std::vec::Vec<ProviderNetwork>,
 }
+///`PaginatedRackGroupList`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "results"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer"
+///    },
+///    "next": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "uri"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "previous": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "uri"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "results": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/RackGroup"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct PaginatedRackGroupList {
+    pub count: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub next: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub previous: ::std::option::Option<::std::string::String>,
+    pub results: ::std::vec::Vec<RackGroup>,
+}
 ///`PaginatedRackList`
 ///
 /// <details><summary>JSON schema</summary>
@@ -101579,6 +104112,62 @@ pub struct PaginatedVirtualDiskList {
     pub previous: ::std::option::Option<::std::string::String>,
     pub results: ::std::vec::Vec<VirtualDisk>,
 }
+///`PaginatedVirtualMachineTypeList`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "results"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer"
+///    },
+///    "next": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "uri"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "previous": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "uri"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "results": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/VirtualMachineType"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct PaginatedVirtualMachineTypeList {
+    pub count: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub next: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub previous: ::std::option::Option<::std::string::String>,
+    pub results: ::std::vec::Vec<VirtualMachineType>,
+}
 ///`PaginatedVirtualMachineWithConfigContextList`
 ///
 /// <details><summary>JSON schema</summary>
@@ -102868,6 +105457,34 @@ for PatchedAsnRangeRequestTenant {
 ///        }
 ///      ]
 ///    },
+///    "role": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefRoleRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "sites": {
 ///      "type": "array",
 ///      "items": {
@@ -102927,6 +105544,8 @@ pub struct PatchedAsnRequest {
     pub owner: ::std::option::Option<PatchedAsnRequestOwner>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rir: ::std::option::Option<PatchedAsnRequestRir>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<PatchedAsnRequestRole>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub sites: ::std::vec::Vec<i64>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -102943,6 +105562,7 @@ impl ::std::default::Default for PatchedAsnRequest {
             description: Default::default(),
             owner: Default::default(),
             rir: Default::default(),
+            role: Default::default(),
             sites: Default::default(),
             tags: Default::default(),
             tenant: Default::default(),
@@ -103111,6 +105731,51 @@ for PatchedAsnRequestRir {
         Self::Variant1(value)
     }
 }
+///`PatchedAsnRequestRole`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRoleRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedAsnRequestRole {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefRoleRequest>),
+}
+impl ::std::convert::From<i64> for PatchedAsnRequestRole {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefRoleRequest>>
+for PatchedAsnRequestRole {
+    fn from(value: ::std::option::Option<BriefRoleRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
 ///`PatchedAsnRequestTenant`
 ///
 /// <details><summary>JSON schema</summary>
@@ -103238,6 +105903,292 @@ impl ::std::convert::From<i64> for PatchedBookmarkRequestUser {
 impl ::std::convert::From<BriefUserRequest> for PatchedBookmarkRequestUser {
     fn from(value: BriefUserRequest) -> Self {
         Self::BriefUserRequest(value)
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefOwnerRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTagRequest"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct PatchedCableBundleRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<PatchedCableBundleRequestDescription>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<PatchedCableBundleRequestName>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<PatchedCableBundleRequestOwner>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTagRequest>,
+}
+impl ::std::default::Default for PatchedCableBundleRequest {
+    fn default() -> Self {
+        Self {
+            comments: Default::default(),
+            custom_fields: Default::default(),
+            description: Default::default(),
+            name: Default::default(),
+            owner: Default::default(),
+            tags: Default::default(),
+        }
+    }
+}
+///`PatchedCableBundleRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedCableBundleRequestDescription(::std::string::String);
+impl ::std::ops::Deref for PatchedCableBundleRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedCableBundleRequestDescription>
+for ::std::string::String {
+    fn from(value: PatchedCableBundleRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedCableBundleRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedCableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PatchedCableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PatchedCableBundleRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedCableBundleRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PatchedCableBundleRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedCableBundleRequestName(::std::string::String);
+impl ::std::ops::Deref for PatchedCableBundleRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedCableBundleRequestName> for ::std::string::String {
+    fn from(value: PatchedCableBundleRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedCableBundleRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedCableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PatchedCableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PatchedCableBundleRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedCableBundleRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PatchedCableBundleRequestOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwnerRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedCableBundleRequestOwner {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefOwnerRequest>),
+}
+impl ::std::convert::From<i64> for PatchedCableBundleRequestOwner {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefOwnerRequest>>
+for PatchedCableBundleRequestOwner {
+    fn from(value: ::std::option::Option<BriefOwnerRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///Base serializer class for models inheriting from OrganizationalModel.
@@ -106144,6 +109095,10 @@ impl<'de> ::serde::Deserialize<'de> for PatchedConfigContextRequestTagsItem {
 ///        }
 ///      ]
 ///    },
+///    "debug": {
+///      "description": "Enable verbose error output when rendering this template. Not recommended for production use.",
+///      "type": "boolean"
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -106232,6 +109187,9 @@ pub struct PatchedConfigTemplateRequest {
     pub auto_sync_enabled: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub data_source: ::std::option::Option<PatchedConfigTemplateRequestDataSource>,
+    ///Enable verbose error output when rendering this template. Not recommended for production use.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub debug: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<PatchedConfigTemplateRequestDescription>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -106261,6 +109219,7 @@ impl ::std::default::Default for PatchedConfigTemplateRequest {
             as_attachment: Default::default(),
             auto_sync_enabled: Default::default(),
             data_source: Default::default(),
+            debug: Default::default(),
             description: Default::default(),
             environment_params: Default::default(),
             file_extension: Default::default(),
@@ -108277,6 +111236,9 @@ impl ::std::default::Default for PatchedDashboardRequest {
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "installed_device": {
 ///      "anyOf": [
 ///        {
@@ -108362,6 +111324,8 @@ pub struct PatchedDeviceBayRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub device: ::std::option::Option<PatchedDeviceBayRequestDevice>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub installed_device: ::std::option::Option<PatchedDeviceBayRequestInstalledDevice>,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -108379,6 +111343,7 @@ impl ::std::default::Default for PatchedDeviceBayRequest {
             custom_fields: Default::default(),
             description: Default::default(),
             device: Default::default(),
+            enabled: Default::default(),
             installed_device: Default::default(),
             label: Default::default(),
             name: Default::default(),
@@ -108757,6 +111722,9 @@ validation. (DRF does not do this by default; see https://github.com/encode/djan
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "label": {
 ///      "description": "Physical label",
 ///      "type": "string",
@@ -108778,6 +111746,8 @@ pub struct PatchedDeviceBayTemplateRequest {
     pub description: ::std::option::Option<PatchedDeviceBayTemplateRequestDescription>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub device_type: ::std::option::Option<PatchedDeviceBayTemplateRequestDeviceType>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<PatchedDeviceBayTemplateRequestLabel>,
@@ -108790,6 +111760,7 @@ impl ::std::default::Default for PatchedDeviceBayTemplateRequest {
         Self {
             description: Default::default(),
             device_type: Default::default(),
+            enabled: Default::default(),
             label: Default::default(),
             name: Default::default(),
         }
@@ -112462,6 +115433,9 @@ impl<'de> ::serde::Deserialize<'de> for PatchedManufacturerRequestSlug {
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "installed_module": {
 ///      "anyOf": [
 ///        {
@@ -112580,6 +115554,8 @@ pub struct PatchedModuleBayRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub device: ::std::option::Option<PatchedModuleBayRequestDevice>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub installed_module: ::std::option::Option<PatchedModuleBayRequestInstalledModule>,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -112602,6 +115578,7 @@ impl ::std::default::Default for PatchedModuleBayRequest {
             custom_fields: Default::default(),
             description: Default::default(),
             device: Default::default(),
+            enabled: Default::default(),
             installed_module: Default::default(),
             label: Default::default(),
             module: Default::default(),
@@ -113119,6 +116096,9 @@ validation. (DRF does not do this by default; see https://github.com/encode/djan
 ///        }
 ///      ]
 ///    },
+///    "enabled": {
+///      "type": "boolean"
+///    },
 ///    "label": {
 ///      "description": "Physical label",
 ///      "type": "string",
@@ -113173,6 +116153,8 @@ pub struct PatchedModuleBayTemplateRequest {
     pub description: ::std::option::Option<PatchedModuleBayTemplateRequestDescription>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub device_type: ::std::option::Option<PatchedModuleBayTemplateRequestDeviceType>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
     ///Physical label
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<PatchedModuleBayTemplateRequestLabel>,
@@ -113190,6 +116172,7 @@ impl ::std::default::Default for PatchedModuleBayTemplateRequest {
         Self {
             description: Default::default(),
             device_type: Default::default(),
+            enabled: Default::default(),
             label: Default::default(),
             module_type: Default::default(),
             name: Default::default(),
@@ -116586,6 +119569,382 @@ impl<'de> ::serde::Deserialize<'de> for PatchedProviderRequestSlug {
 ///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
 ///  "type": "object",
 ///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefOwnerRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTagRequest"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct PatchedRackGroupRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<PatchedRackGroupRequestDescription>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<PatchedRackGroupRequestName>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<PatchedRackGroupRequestOwner>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub slug: ::std::option::Option<PatchedRackGroupRequestSlug>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTagRequest>,
+}
+impl ::std::default::Default for PatchedRackGroupRequest {
+    fn default() -> Self {
+        Self {
+            comments: Default::default(),
+            custom_fields: Default::default(),
+            description: Default::default(),
+            name: Default::default(),
+            owner: Default::default(),
+            slug: Default::default(),
+            tags: Default::default(),
+        }
+    }
+}
+///`PatchedRackGroupRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedRackGroupRequestDescription(::std::string::String);
+impl ::std::ops::Deref for PatchedRackGroupRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedRackGroupRequestDescription> for ::std::string::String {
+    fn from(value: PatchedRackGroupRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedRackGroupRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedRackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PatchedRackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PatchedRackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedRackGroupRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PatchedRackGroupRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedRackGroupRequestName(::std::string::String);
+impl ::std::ops::Deref for PatchedRackGroupRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedRackGroupRequestName> for ::std::string::String {
+    fn from(value: PatchedRackGroupRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedRackGroupRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedRackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PatchedRackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PatchedRackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedRackGroupRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PatchedRackGroupRequestOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwnerRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedRackGroupRequestOwner {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefOwnerRequest>),
+}
+impl ::std::convert::From<i64> for PatchedRackGroupRequestOwner {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefOwnerRequest>>
+for PatchedRackGroupRequestOwner {
+    fn from(value: ::std::option::Option<BriefOwnerRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`PatchedRackGroupRequestSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedRackGroupRequestSlug(::std::string::String);
+impl ::std::ops::Deref for PatchedRackGroupRequestSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedRackGroupRequestSlug> for ::std::string::String {
+    fn from(value: PatchedRackGroupRequestSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedRackGroupRequestSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedRackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for PatchedRackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PatchedRackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedRackGroupRequestSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from OrganizationalModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
+///  "type": "object",
+///  "properties": {
 ///    "color": {
 ///      "type": "string",
 ///      "maxLength": 6,
@@ -118597,6 +121956,11 @@ impl<'de> ::serde::Deserialize<'de> for PatchedSavedFilterRequestSlug {
 ///        }
 ///      ]
 ///    },
+///    "notifications": {
+///      "description": "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never",
+///      "default": "always",
+///      "type": "string"
+///    },
 ///    "schedule_at": {
 ///      "anyOf": [
 ///        {
@@ -118620,6 +121984,9 @@ pub struct PatchedScriptInputRequest {
     pub data: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub interval: ::std::option::Option<i64>,
+    #[doc = "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never"]
+    #[serde(default = "defaults::patched_script_input_request_notifications")]
+    pub notifications: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub schedule_at: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
 }
@@ -118629,6 +121996,7 @@ impl ::std::default::Default for PatchedScriptInputRequest {
             commit: Default::default(),
             data: Default::default(),
             interval: Default::default(),
+            notifications: defaults::patched_script_input_request_notifications(),
             schedule_at: Default::default(),
         }
     }
@@ -121950,6 +125318,499 @@ for PatchedVirtualDiskRequestVirtualMachine {
         Self::BriefVirtualMachineRequest(value)
     }
 }
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "default_memory": {
+///      "anyOf": [
+///        {
+///          "title": "Default memory (MB)",
+///          "type": "integer",
+///          "maximum": 2147483647.0,
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "default_platform": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefPlatformRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "default_vcpus": {
+///      "anyOf": [
+///        {
+///          "type": "number",
+///          "format": "double",
+///          "exclusiveMaximum": 10000.0,
+///          "minimum": 0.01
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefOwnerRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTagRequest"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct PatchedVirtualMachineTypeRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_memory: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_platform: ::std::option::Option<
+        PatchedVirtualMachineTypeRequestDefaultPlatform,
+    >,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_vcpus: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<PatchedVirtualMachineTypeRequestDescription>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<PatchedVirtualMachineTypeRequestName>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<PatchedVirtualMachineTypeRequestOwner>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub slug: ::std::option::Option<PatchedVirtualMachineTypeRequestSlug>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTagRequest>,
+}
+impl ::std::default::Default for PatchedVirtualMachineTypeRequest {
+    fn default() -> Self {
+        Self {
+            comments: Default::default(),
+            custom_fields: Default::default(),
+            default_memory: Default::default(),
+            default_platform: Default::default(),
+            default_vcpus: Default::default(),
+            description: Default::default(),
+            name: Default::default(),
+            owner: Default::default(),
+            slug: Default::default(),
+            tags: Default::default(),
+        }
+    }
+}
+///`PatchedVirtualMachineTypeRequestDefaultPlatform`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefPlatformRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedVirtualMachineTypeRequestDefaultPlatform {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefPlatformRequest>),
+}
+impl ::std::convert::From<i64> for PatchedVirtualMachineTypeRequestDefaultPlatform {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefPlatformRequest>>
+for PatchedVirtualMachineTypeRequestDefaultPlatform {
+    fn from(value: ::std::option::Option<BriefPlatformRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`PatchedVirtualMachineTypeRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedVirtualMachineTypeRequestDescription(::std::string::String);
+impl ::std::ops::Deref for PatchedVirtualMachineTypeRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedVirtualMachineTypeRequestDescription>
+for ::std::string::String {
+    fn from(value: PatchedVirtualMachineTypeRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedVirtualMachineTypeRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedVirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PatchedVirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PatchedVirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedVirtualMachineTypeRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PatchedVirtualMachineTypeRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedVirtualMachineTypeRequestName(::std::string::String);
+impl ::std::ops::Deref for PatchedVirtualMachineTypeRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedVirtualMachineTypeRequestName>
+for ::std::string::String {
+    fn from(value: PatchedVirtualMachineTypeRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedVirtualMachineTypeRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedVirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PatchedVirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PatchedVirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedVirtualMachineTypeRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PatchedVirtualMachineTypeRequestOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwnerRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedVirtualMachineTypeRequestOwner {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefOwnerRequest>),
+}
+impl ::std::convert::From<i64> for PatchedVirtualMachineTypeRequestOwner {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefOwnerRequest>>
+for PatchedVirtualMachineTypeRequestOwner {
+    fn from(value: ::std::option::Option<BriefOwnerRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`PatchedVirtualMachineTypeRequestSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct PatchedVirtualMachineTypeRequestSlug(::std::string::String);
+impl ::std::ops::Deref for PatchedVirtualMachineTypeRequestSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PatchedVirtualMachineTypeRequestSlug>
+for ::std::string::String {
+    fn from(value: PatchedVirtualMachineTypeRequestSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PatchedVirtualMachineTypeRequestSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PatchedVirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for PatchedVirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PatchedVirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PatchedVirtualMachineTypeRequestSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///Base serializer class for models inheriting from OrganizationalModel.
 ///
 /// <details><summary>JSON schema</summary>
@@ -124270,6 +128131,34 @@ for PatchedWritableAggregateRequestTenant {
 ///        "$ref": "#/definitions/GenericObjectRequest"
 ///      }
 ///    },
+///    "bundle": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefCableBundleRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "color": {
 ///      "type": "string",
 ///      "maxLength": 6,
@@ -124406,6 +128295,8 @@ pub struct PatchedWritableCableRequest {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub b_terminations: ::std::vec::Vec<GenericObjectRequest>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bundle: ::std::option::Option<PatchedWritableCableRequestBundle>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub color: ::std::option::Option<PatchedWritableCableRequestColor>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub comments: ::std::option::Option<::std::string::String>,
@@ -124443,6 +128334,7 @@ impl ::std::default::Default for PatchedWritableCableRequest {
         Self {
             a_terminations: Default::default(),
             b_terminations: Default::default(),
+            bundle: Default::default(),
             color: Default::default(),
             comments: Default::default(),
             custom_fields: Default::default(),
@@ -124457,6 +128349,51 @@ impl ::std::default::Default for PatchedWritableCableRequest {
             tenant: Default::default(),
             type_: Default::default(),
         }
+    }
+}
+///`PatchedWritableCableRequestBundle`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefCableBundleRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedWritableCableRequestBundle {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefCableBundleRequest>),
+}
+impl ::std::convert::From<i64> for PatchedWritableCableRequestBundle {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefCableBundleRequest>>
+for PatchedWritableCableRequestBundle {
+    fn from(value: ::std::option::Option<BriefCableBundleRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`PatchedWritableCableRequestColor`
@@ -128573,6 +132510,13 @@ impl<'de> ::serde::Deserialize<'de> for PatchedWritableContactGroupRequestSlug {
 ///        }
 ///      ]
 ///    },
+///    "choice_colors": {
+///      "type": "object",
+///      "additionalProperties": {
+///        "description": "* `blue` - Blue\n* `indigo` - Indigo\n* `purple` - Purple\n* `pink` - Pink\n* `red` - Red\n* `orange` - Orange\n* `yellow` - Yellow\n* `green` - Green\n* `teal` - Teal\n* `cyan` - Cyan\n* `gray` - Gray\n* `black` - Black\n* `white` - White",
+///        "type": "string"
+///      }
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -128631,6 +132575,11 @@ impl<'de> ::serde::Deserialize<'de> for PatchedWritableContactGroupRequestSlug {
 pub struct PatchedWritableCustomFieldChoiceSetRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub base_choices: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub choice_colors: ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::string::String,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<
         PatchedWritableCustomFieldChoiceSetRequestDescription,
@@ -128649,6 +132598,7 @@ impl ::std::default::Default for PatchedWritableCustomFieldChoiceSetRequest {
     fn default() -> Self {
         Self {
             base_choices: Default::default(),
+            choice_colors: Default::default(),
             description: Default::default(),
             extra_choices: Default::default(),
             name: Default::default(),
@@ -129053,6 +133003,16 @@ for PatchedWritableCustomFieldChoiceSetRequestOwner {
 ///      "type": "string",
 ///      "maxLength": 500
 ///    },
+///    "validation_schema": {
+///      "anyOf": [
+///        {
+///          "description": "A JSON schema definition for validating the custom field value"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "weight": {
 ///      "title": "Display weight",
 ///      "description": "Fields with higher weights appear lower in a form.",
@@ -129154,6 +133114,8 @@ pub struct PatchedWritableCustomFieldRequest {
     pub validation_regex: ::std::option::Option<
         PatchedWritableCustomFieldRequestValidationRegex,
     >,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub validation_schema: ::std::option::Option<::serde_json::Value>,
     ///Fields with higher weights appear lower in a form.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weight: ::std::option::Option<i64>,
@@ -129183,6 +133145,7 @@ impl ::std::default::Default for PatchedWritableCustomFieldRequest {
             validation_maximum: Default::default(),
             validation_minimum: Default::default(),
             validation_regex: Default::default(),
+            validation_schema: Default::default(),
             weight: Default::default(),
         }
     }
@@ -141136,6 +145099,11 @@ for PatchedWritableLocationRequestTenant {
 ///  "description": "Base serializer class for models inheriting from PrimaryModel.",
 ///  "type": "object",
 ///  "properties": {
+///    "adopt_components": {
+///      "description": "Adopt already existing components",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "asset_tag": {
 ///      "anyOf": [
 ///        {
@@ -141210,6 +145178,11 @@ for PatchedWritableLocationRequestTenant {
 ///        }
 ///      ]
 ///    },
+///    "replicate_components": {
+///      "description": "Automatically populate components associated with this module type (default: true)",
+///      "default": true,
+///      "type": "boolean"
+///    },
 ///    "serial": {
 ///      "title": "Serial number",
 ///      "type": "string",
@@ -141231,6 +145204,9 @@ for PatchedWritableLocationRequestTenant {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct PatchedWritableModuleRequest {
+    ///Adopt already existing components
+    #[serde(default)]
+    pub adopt_components: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub asset_tag: ::std::option::Option<PatchedWritableModuleRequestAssetTag>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -141247,6 +145223,9 @@ pub struct PatchedWritableModuleRequest {
     pub module_type: ::std::option::Option<PatchedWritableModuleRequestModuleType>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<PatchedWritableModuleRequestOwner>,
+    ///Automatically populate components associated with this module type (default: true)
+    #[serde(default = "defaults::default_bool::<true>")]
+    pub replicate_components: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub serial: ::std::option::Option<SerialNumber>,
     #[doc = "* `offline` - Offline\n* `active` - Active\n* `planned` - Planned\n* `staged` - Staged\n* `failed` - Failed\n* `decommissioning` - Decommissioning"]
@@ -141258,6 +145237,7 @@ pub struct PatchedWritableModuleRequest {
 impl ::std::default::Default for PatchedWritableModuleRequest {
     fn default() -> Self {
         Self {
+            adopt_components: Default::default(),
             asset_tag: Default::default(),
             comments: Default::default(),
             custom_fields: Default::default(),
@@ -141266,6 +145246,7 @@ impl ::std::default::Default for PatchedWritableModuleRequest {
             module_bay: Default::default(),
             module_type: Default::default(),
             owner: Default::default(),
+            replicate_components: defaults::default_bool::<true>(),
             serial: Default::default(),
             status: Default::default(),
             tags: Default::default(),
@@ -146289,6 +150270,34 @@ for PatchedWritablePrefixRequestVrf {
 ///        }
 ///      ]
 ///    },
+///    "group": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefRackGroupRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "location": {
 ///      "anyOf": [
 ///        {
@@ -146602,6 +150611,8 @@ pub struct PatchedWritableRackRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form_factor: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub group: ::std::option::Option<PatchedWritableRackRequestGroup>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub location: ::std::option::Option<PatchedWritableRackRequestLocation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_weight: ::std::option::Option<i64>,
@@ -146664,6 +150675,7 @@ impl ::std::default::Default for PatchedWritableRackRequest {
             description: Default::default(),
             facility_id: Default::default(),
             form_factor: Default::default(),
+            group: Default::default(),
             location: Default::default(),
             max_weight: Default::default(),
             mounting_depth: Default::default(),
@@ -146911,6 +150923,51 @@ impl<'de> ::serde::Deserialize<'de> for PatchedWritableRackRequestFacilityId {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`PatchedWritableRackRequestGroup`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRackGroupRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedWritableRackRequestGroup {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefRackGroupRequest>),
+}
+impl ::std::convert::From<i64> for PatchedWritableRackRequestGroup {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefRackGroupRequest>>
+for PatchedWritableRackRequestGroup {
+    fn from(value: ::std::option::Option<BriefRackGroupRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`PatchedWritableRackRequestLocation`
@@ -155063,6 +159120,34 @@ for PatchedWritableVirtualDeviceContextRequestTenant {
 ///          "type": "null"
 ///        }
 ///      ]
+///    },
+///    "virtual_machine_type": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefVirtualMachineTypeRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    }
 ///  }
 ///}
@@ -155140,6 +159225,10 @@ pub struct PatchedWritableVirtualMachineWithConfigContextRequest {
     >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub vcpus: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_machine_type: ::std::option::Option<
+        PatchedWritableVirtualMachineWithConfigContextRequestVirtualMachineType,
+    >,
 }
 impl ::std::default::Default for PatchedWritableVirtualMachineWithConfigContextRequest {
     fn default() -> Self {
@@ -155166,6 +159255,7 @@ impl ::std::default::Default for PatchedWritableVirtualMachineWithConfigContextR
             tags: Default::default(),
             tenant: Default::default(),
             vcpus: Default::default(),
+            virtual_machine_type: Default::default(),
         }
     }
 }
@@ -155793,6 +159883,52 @@ for PatchedWritableVirtualMachineWithConfigContextRequestTenant {
 impl ::std::convert::From<::std::option::Option<BriefTenantRequest>>
 for PatchedWritableVirtualMachineWithConfigContextRequestTenant {
     fn from(value: ::std::option::Option<BriefTenantRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`PatchedWritableVirtualMachineWithConfigContextRequestVirtualMachineType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefVirtualMachineTypeRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum PatchedWritableVirtualMachineWithConfigContextRequestVirtualMachineType {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefVirtualMachineTypeRequest>),
+}
+impl ::std::convert::From<i64>
+for PatchedWritableVirtualMachineWithConfigContextRequestVirtualMachineType {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefVirtualMachineTypeRequest>>
+for PatchedWritableVirtualMachineWithConfigContextRequestVirtualMachineType {
+    fn from(value: ::std::option::Option<BriefVirtualMachineTypeRequest>) -> Self {
         Self::Variant1(value)
     }
 }
@@ -169473,6 +173609,20 @@ impl<'de> ::serde::Deserialize<'de> for PythonModelClassName {
 ///        }
 ///      ]
 ///    },
+///    "group": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRackGroup"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "id": {
 ///      "type": "integer"
 ///    },
@@ -169777,6 +173927,8 @@ pub struct Rack {
     pub facility_id: ::std::option::Option<RackFacilityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form_factor: ::std::option::Option<RackFormFactor>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub group: ::std::option::Option<BriefRackGroup>,
     pub id: i64,
     pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -170117,6 +174269,717 @@ impl ::std::default::Default for RackFormFactor {
         }
     }
 }
+///Base serializer class for models inheriting from OrganizationalModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
+///  "type": "object",
+///  "required": [
+///    "created",
+///    "display",
+///    "display_url",
+///    "id",
+///    "last_updated",
+///    "name",
+///    "rack_count",
+///    "slug",
+///    "url"
+///  ],
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "created": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "date-time"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "display": {
+///      "type": "string"
+///    },
+///    "display_url": {
+///      "type": "string",
+///      "format": "uri"
+///    },
+///    "id": {
+///      "type": "integer"
+///    },
+///    "last_updated": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "date-time"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwner"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "rack_count": {
+///      "type": "integer",
+///      "format": "int64"
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTag"
+///      }
+///    },
+///    "url": {
+///      "type": "string",
+///      "format": "uri"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct RackGroup {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    pub created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<RackGroupDescription>,
+    pub display: ::std::string::String,
+    pub display_url: ::std::string::String,
+    pub id: i64,
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub name: RackGroupName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<BriefOwner>,
+    pub rack_count: i64,
+    pub slug: RackGroupSlug,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTag>,
+    pub url: ::std::string::String,
+}
+///`RackGroupDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RackGroupDescription(::std::string::String);
+impl ::std::ops::Deref for RackGroupDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RackGroupDescription> for ::std::string::String {
+    fn from(value: RackGroupDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RackGroupDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RackGroupDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RackGroupDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RackGroupDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RackGroupDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`RackGroupName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RackGroupName(::std::string::String);
+impl ::std::ops::Deref for RackGroupName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RackGroupName> for ::std::string::String {
+    fn from(value: RackGroupName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RackGroupName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RackGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RackGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RackGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RackGroupName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from OrganizationalModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
+///  "type": "object",
+///  "required": [
+///    "name",
+///    "slug"
+///  ],
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefOwnerRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTagRequest"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct RackGroupRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<RackGroupRequestDescription>,
+    pub name: RackGroupRequestName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<RackGroupRequestOwner>,
+    pub slug: RackGroupRequestSlug,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTagRequest>,
+}
+///`RackGroupRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RackGroupRequestDescription(::std::string::String);
+impl ::std::ops::Deref for RackGroupRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RackGroupRequestDescription> for ::std::string::String {
+    fn from(value: RackGroupRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RackGroupRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RackGroupRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RackGroupRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`RackGroupRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RackGroupRequestName(::std::string::String);
+impl ::std::ops::Deref for RackGroupRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RackGroupRequestName> for ::std::string::String {
+    fn from(value: RackGroupRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RackGroupRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RackGroupRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RackGroupRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`RackGroupRequestOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwnerRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum RackGroupRequestOwner {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefOwnerRequest>),
+}
+impl ::std::convert::From<i64> for RackGroupRequestOwner {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefOwnerRequest>>
+for RackGroupRequestOwner {
+    fn from(value: ::std::option::Option<BriefOwnerRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`RackGroupRequestSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RackGroupRequestSlug(::std::string::String);
+impl ::std::ops::Deref for RackGroupRequestSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RackGroupRequestSlug> for ::std::string::String {
+    fn from(value: RackGroupRequestSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RackGroupRequestSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RackGroupRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RackGroupRequestSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`RackGroupSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RackGroupSlug(::std::string::String);
+impl ::std::ops::Deref for RackGroupSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RackGroupSlug> for ::std::string::String {
+    fn from(value: RackGroupSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RackGroupSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RackGroupSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RackGroupSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RackGroupSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RackGroupSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`RackName`
 ///
 /// <details><summary>JSON schema</summary>
@@ -170291,6 +175154,34 @@ impl ::std::default::Default for RackOuterUnit {
 ///        {
 ///          "description": "* `2-post-frame` - 2-post frame\n* `4-post-frame` - 4-post frame\n* `4-post-cabinet` - 4-post cabinet\n* `wall-frame` - Wall-mounted frame\n* `wall-frame-vertical` - Wall-mounted frame (vertical)\n* `wall-cabinet` - Wall-mounted cabinet\n* `wall-cabinet-vertical` - Wall-mounted cabinet (vertical)",
 ///          "type": "string"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "group": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefRackGroupRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
 ///        },
 ///        {
 ///          "type": "null"
@@ -170609,6 +175500,8 @@ pub struct RackRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form_factor: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub group: ::std::option::Option<RackRequestGroup>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub location: ::std::option::Option<RackRequestLocation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_weight: ::std::option::Option<i64>,
@@ -170868,6 +175761,51 @@ impl<'de> ::serde::Deserialize<'de> for RackRequestFacilityId {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`RackRequestGroup`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRackGroupRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum RackRequestGroup {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefRackGroupRequest>),
+}
+impl ::std::convert::From<i64> for RackRequestGroup {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefRackGroupRequest>>
+for RackRequestGroup {
+    fn from(value: ::std::option::Option<BriefRackGroupRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`RackRequestLocation`
@@ -171220,6 +176158,7 @@ for RackRequestTenant {
 ///    "id",
 ///    "last_updated",
 ///    "rack",
+///    "unit_count",
 ///    "units",
 ///    "url",
 ///    "user"
@@ -171317,6 +176256,10 @@ for RackRequestTenant {
 ///        }
 ///      ]
 ///    },
+///    "unit_count": {
+///      "type": "integer",
+///      "format": "int32"
+///    },
 ///    "units": {
 ///      "type": "array",
 ///      "items": {
@@ -171357,6 +176300,7 @@ pub struct RackReservation {
     pub tags: ::std::vec::Vec<NestedTag>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tenant: ::std::option::Option<BriefTenant>,
+    pub unit_count: i32,
     pub units: ::std::vec::Vec<i64>,
     pub url: ::std::string::String,
     pub user: BriefUser,
@@ -178027,6 +182971,7 @@ impl<'de> ::serde::Deserialize<'de> for RirSlug {
 ///  "description": "Base serializer class for models inheriting from OrganizationalModel.",
 ///  "type": "object",
 ///  "required": [
+///    "asn_count",
 ///    "created",
 ///    "display",
 ///    "display_url",
@@ -178039,6 +182984,10 @@ impl<'de> ::serde::Deserialize<'de> for RirSlug {
 ///    "vlan_count"
 ///  ],
 ///  "properties": {
+///    "asn_count": {
+///      "type": "integer",
+///      "format": "int64"
+///    },
 ///    "comments": {
 ///      "type": "string"
 ///    },
@@ -178134,6 +183083,7 @@ impl<'de> ::serde::Deserialize<'de> for RirSlug {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct Role {
+    pub asn_count: i64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub comments: ::std::option::Option<::std::string::String>,
     pub created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -180310,6 +185260,11 @@ pub struct Script {
 ///        }
 ///      ]
 ///    },
+///    "notifications": {
+///      "description": "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never",
+///      "default": "always",
+///      "type": "string"
+///    },
 ///    "schedule_at": {
 ///      "anyOf": [
 ///        {
@@ -180331,6 +185286,9 @@ pub struct ScriptInputRequest {
     pub data: ::serde_json::Value,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub interval: ::std::option::Option<i64>,
+    #[doc = "* `always` - Always\n* `on_failure` - On failure\n* `never` - Never"]
+    #[serde(default = "defaults::script_input_request_notifications")]
+    pub notifications: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub schedule_at: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
 }
@@ -196048,6 +201006,872 @@ for VirtualDiskRequestVirtualMachine {
 ///  "description": "Base serializer class for models inheriting from PrimaryModel.",
 ///  "type": "object",
 ///  "required": [
+///    "created",
+///    "display",
+///    "display_url",
+///    "id",
+///    "last_updated",
+///    "name",
+///    "slug",
+///    "url",
+///    "virtual_machine_count"
+///  ],
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "created": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "date-time"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "default_memory": {
+///      "anyOf": [
+///        {
+///          "title": "Default memory (MB)",
+///          "type": "integer",
+///          "maximum": 2147483647.0,
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "default_platform": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefPlatform"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "default_vcpus": {
+///      "anyOf": [
+///        {
+///          "type": "number",
+///          "format": "double",
+///          "exclusiveMaximum": 10000.0,
+///          "minimum": 0.01
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "display": {
+///      "type": "string"
+///    },
+///    "display_url": {
+///      "type": "string",
+///      "format": "uri"
+///    },
+///    "id": {
+///      "type": "integer"
+///    },
+///    "last_updated": {
+///      "anyOf": [
+///        {
+///          "type": "string",
+///          "format": "date-time"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwner"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTag"
+///      }
+///    },
+///    "url": {
+///      "type": "string",
+///      "format": "uri"
+///    },
+///    "virtual_machine_count": {
+///      "type": "integer"
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct VirtualMachineType {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    pub created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_memory: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_platform: ::std::option::Option<BriefPlatform>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_vcpus: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<VirtualMachineTypeDescription>,
+    pub display: ::std::string::String,
+    pub display_url: ::std::string::String,
+    pub id: i64,
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub name: VirtualMachineTypeName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<BriefOwner>,
+    pub slug: VirtualMachineTypeSlug,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTag>,
+    pub url: ::std::string::String,
+    pub virtual_machine_count: i64,
+}
+///`VirtualMachineTypeDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VirtualMachineTypeDescription(::std::string::String);
+impl ::std::ops::Deref for VirtualMachineTypeDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VirtualMachineTypeDescription> for ::std::string::String {
+    fn from(value: VirtualMachineTypeDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for VirtualMachineTypeDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VirtualMachineTypeDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for VirtualMachineTypeDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for VirtualMachineTypeDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VirtualMachineTypeDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`VirtualMachineTypeName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VirtualMachineTypeName(::std::string::String);
+impl ::std::ops::Deref for VirtualMachineTypeName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VirtualMachineTypeName> for ::std::string::String {
+    fn from(value: VirtualMachineTypeName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for VirtualMachineTypeName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VirtualMachineTypeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for VirtualMachineTypeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for VirtualMachineTypeName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VirtualMachineTypeName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
+///    "name",
+///    "slug"
+///  ],
+///  "properties": {
+///    "comments": {
+///      "type": "string"
+///    },
+///    "custom_fields": {
+///      "type": "object",
+///      "additionalProperties": {}
+///    },
+///    "default_memory": {
+///      "anyOf": [
+///        {
+///          "title": "Default memory (MB)",
+///          "type": "integer",
+///          "maximum": 2147483647.0,
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "default_platform": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefPlatformRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "default_vcpus": {
+///      "anyOf": [
+///        {
+///          "type": "number",
+///          "format": "double",
+///          "exclusiveMaximum": 10000.0,
+///          "minimum": 0.01
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "description": {
+///      "type": "string",
+///      "maxLength": 200
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1
+///    },
+///    "owner": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefOwnerRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "slug": {
+///      "type": "string",
+///      "maxLength": 100,
+///      "minLength": 1,
+///      "pattern": "^[-a-zA-Z0-9_]+$"
+///    },
+///    "tags": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/definitions/NestedTagRequest"
+///      }
+///    }
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+pub struct VirtualMachineTypeRequest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub comments: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub custom_fields: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_memory: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_platform: ::std::option::Option<
+        VirtualMachineTypeRequestDefaultPlatform,
+    >,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_vcpus: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<VirtualMachineTypeRequestDescription>,
+    pub name: VirtualMachineTypeRequestName,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner: ::std::option::Option<VirtualMachineTypeRequestOwner>,
+    pub slug: VirtualMachineTypeRequestSlug,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub tags: ::std::vec::Vec<NestedTagRequest>,
+}
+///`VirtualMachineTypeRequestDefaultPlatform`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefPlatformRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum VirtualMachineTypeRequestDefaultPlatform {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefPlatformRequest>),
+}
+impl ::std::convert::From<i64> for VirtualMachineTypeRequestDefaultPlatform {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefPlatformRequest>>
+for VirtualMachineTypeRequestDefaultPlatform {
+    fn from(value: ::std::option::Option<BriefPlatformRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`VirtualMachineTypeRequestDescription`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 200
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VirtualMachineTypeRequestDescription(::std::string::String);
+impl ::std::ops::Deref for VirtualMachineTypeRequestDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VirtualMachineTypeRequestDescription>
+for ::std::string::String {
+    fn from(value: VirtualMachineTypeRequestDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for VirtualMachineTypeRequestDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 200usize {
+            return Err("longer than 200 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for VirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for VirtualMachineTypeRequestDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VirtualMachineTypeRequestDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`VirtualMachineTypeRequestName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VirtualMachineTypeRequestName(::std::string::String);
+impl ::std::ops::Deref for VirtualMachineTypeRequestName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VirtualMachineTypeRequestName> for ::std::string::String {
+    fn from(value: VirtualMachineTypeRequestName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for VirtualMachineTypeRequestName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for VirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for VirtualMachineTypeRequestName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VirtualMachineTypeRequestName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`VirtualMachineTypeRequestOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefOwnerRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum VirtualMachineTypeRequestOwner {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefOwnerRequest>),
+}
+impl ::std::convert::From<i64> for VirtualMachineTypeRequestOwner {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefOwnerRequest>>
+for VirtualMachineTypeRequestOwner {
+    fn from(value: ::std::option::Option<BriefOwnerRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`VirtualMachineTypeRequestSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "minLength": 1,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VirtualMachineTypeRequestSlug(::std::string::String);
+impl ::std::ops::Deref for VirtualMachineTypeRequestSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VirtualMachineTypeRequestSlug> for ::std::string::String {
+    fn from(value: VirtualMachineTypeRequestSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for VirtualMachineTypeRequestSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for VirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for VirtualMachineTypeRequestSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VirtualMachineTypeRequestSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`VirtualMachineTypeSlug`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 100,
+///  "pattern": "^[-a-zA-Z0-9_]+$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct VirtualMachineTypeSlug(::std::string::String);
+impl ::std::ops::Deref for VirtualMachineTypeSlug {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<VirtualMachineTypeSlug> for ::std::string::String {
+    fn from(value: VirtualMachineTypeSlug) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for VirtualMachineTypeSlug {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[-a-zA-Z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[-a-zA-Z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for VirtualMachineTypeSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for VirtualMachineTypeSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for VirtualMachineTypeSlug {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VirtualMachineTypeSlug {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Base serializer class for models inheriting from PrimaryModel.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Base serializer class for models inheriting from PrimaryModel.",
+///  "type": "object",
+///  "required": [
 ///    "config_context",
 ///    "created",
 ///    "display",
@@ -196361,6 +202185,20 @@ for VirtualDiskRequestVirtualMachine {
 ///    },
 ///    "virtual_disk_count": {
 ///      "type": "integer"
+///    },
+///    "virtual_machine_type": {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefVirtualMachineType"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    }
 ///  }
 ///}
@@ -196421,6 +202259,8 @@ pub struct VirtualMachineWithConfigContext {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub vcpus: ::std::option::Option<f64>,
     pub virtual_disk_count: i64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_machine_type: ::std::option::Option<BriefVirtualMachineType>,
 }
 ///`VirtualMachineWithConfigContextDescription`
 ///
@@ -196945,6 +202785,34 @@ impl<'de> ::serde::Deserialize<'de> for VirtualMachineWithConfigContextName {
 ///          "type": "null"
 ///        }
 ///      ]
+///    },
+///    "virtual_machine_type": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefVirtualMachineTypeRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    }
 ///  }
 ///}
@@ -197005,6 +202873,10 @@ pub struct VirtualMachineWithConfigContextRequest {
     pub tenant: ::std::option::Option<VirtualMachineWithConfigContextRequestTenant>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub vcpus: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_machine_type: ::std::option::Option<
+        VirtualMachineWithConfigContextRequestVirtualMachineType,
+    >,
 }
 ///`VirtualMachineWithConfigContextRequestCluster`
 ///
@@ -197612,6 +203484,52 @@ for VirtualMachineWithConfigContextRequestTenant {
         Self::Variant1(value)
     }
 }
+///`VirtualMachineWithConfigContextRequestVirtualMachineType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefVirtualMachineTypeRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum VirtualMachineWithConfigContextRequestVirtualMachineType {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefVirtualMachineTypeRequest>),
+}
+impl ::std::convert::From<i64>
+for VirtualMachineWithConfigContextRequestVirtualMachineType {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefVirtualMachineTypeRequest>>
+for VirtualMachineWithConfigContextRequestVirtualMachineType {
+    fn from(value: ::std::option::Option<BriefVirtualMachineTypeRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
 ///`VirtualMachineWithConfigContextStartOnBoot`
 ///
 /// <details><summary>JSON schema</summary>
@@ -198038,6 +203956,7 @@ impl<'de> ::serde::Deserialize<'de> for VlanDescription {
 ///    "name",
 ///    "scope",
 ///    "slug",
+///    "total_vlan_ids",
 ///    "url",
 ///    "utilization",
 ///    "vlan_count"
@@ -198157,6 +204076,9 @@ impl<'de> ::serde::Deserialize<'de> for VlanDescription {
 ///        }
 ///      ]
 ///    },
+///    "total_vlan_ids": {
+///      "type": "integer"
+///    },
 ///    "url": {
 ///      "type": "string",
 ///      "format": "uri"
@@ -198204,6 +204126,7 @@ pub struct VlanGroup {
     pub tags: ::std::vec::Vec<NestedTag>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tenant: ::std::option::Option<BriefTenant>,
+    pub total_vlan_ids: i64,
     pub url: ::std::string::String,
     pub utilization: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -206706,6 +212629,34 @@ for WritableAggregateRequestTenant {
 ///        "$ref": "#/definitions/GenericObjectRequest"
 ///      }
 ///    },
+///    "bundle": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefCableBundleRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "color": {
 ///      "type": "string",
 ///      "maxLength": 6,
@@ -206842,6 +212793,8 @@ pub struct WritableCableRequest {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub b_terminations: ::std::vec::Vec<GenericObjectRequest>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bundle: ::std::option::Option<WritableCableRequestBundle>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub color: ::std::option::Option<WritableCableRequestColor>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub comments: ::std::option::Option<::std::string::String>,
@@ -206879,6 +212832,7 @@ impl ::std::default::Default for WritableCableRequest {
         Self {
             a_terminations: Default::default(),
             b_terminations: Default::default(),
+            bundle: Default::default(),
             color: Default::default(),
             comments: Default::default(),
             custom_fields: Default::default(),
@@ -206893,6 +212847,51 @@ impl ::std::default::Default for WritableCableRequest {
             tenant: Default::default(),
             type_: Default::default(),
         }
+    }
+}
+///`WritableCableRequestBundle`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefCableBundleRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum WritableCableRequestBundle {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefCableBundleRequest>),
+}
+impl ::std::convert::From<i64> for WritableCableRequestBundle {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefCableBundleRequest>>
+for WritableCableRequestBundle {
+    fn from(value: ::std::option::Option<BriefCableBundleRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`WritableCableRequestColor`
@@ -210841,6 +216840,13 @@ impl<'de> ::serde::Deserialize<'de> for WritableContactGroupRequestSlug {
 ///        }
 ///      ]
 ///    },
+///    "choice_colors": {
+///      "type": "object",
+///      "additionalProperties": {
+///        "description": "* `blue` - Blue\n* `indigo` - Indigo\n* `purple` - Purple\n* `pink` - Pink\n* `red` - Red\n* `orange` - Orange\n* `yellow` - Yellow\n* `green` - Green\n* `teal` - Teal\n* `cyan` - Cyan\n* `gray` - Gray\n* `black` - Black\n* `white` - White",
+///        "type": "string"
+///      }
+///    },
 ///    "description": {
 ///      "type": "string",
 ///      "maxLength": 200
@@ -210899,6 +216905,11 @@ impl<'de> ::serde::Deserialize<'de> for WritableContactGroupRequestSlug {
 pub struct WritableCustomFieldChoiceSetRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub base_choices: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub choice_colors: ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::string::String,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<
         WritableCustomFieldChoiceSetRequestDescription,
@@ -211309,6 +217320,16 @@ for WritableCustomFieldChoiceSetRequestOwner {
 ///      "type": "string",
 ///      "maxLength": 500
 ///    },
+///    "validation_schema": {
+///      "anyOf": [
+///        {
+///          "description": "A JSON schema definition for validating the custom field value"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "weight": {
 ///      "title": "Display weight",
 ///      "description": "Fields with higher weights appear lower in a form.",
@@ -211408,6 +217429,8 @@ pub struct WritableCustomFieldRequest {
     pub validation_regex: ::std::option::Option<
         WritableCustomFieldRequestValidationRegex,
     >,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub validation_schema: ::std::option::Option<::serde_json::Value>,
     ///Fields with higher weights appear lower in a form.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weight: ::std::option::Option<i64>,
@@ -222854,6 +228877,11 @@ for WritableLocationRequestTenant {
 ///    "module_type"
 ///  ],
 ///  "properties": {
+///    "adopt_components": {
+///      "description": "Adopt already existing components",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "asset_tag": {
 ///      "anyOf": [
 ///        {
@@ -222928,6 +228956,11 @@ for WritableLocationRequestTenant {
 ///        }
 ///      ]
 ///    },
+///    "replicate_components": {
+///      "description": "Automatically populate components associated with this module type (default: true)",
+///      "default": true,
+///      "type": "boolean"
+///    },
 ///    "serial": {
 ///      "title": "Serial number",
 ///      "type": "string",
@@ -222949,6 +228982,9 @@ for WritableLocationRequestTenant {
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
 pub struct WritableModuleRequest {
+    ///Adopt already existing components
+    #[serde(default)]
+    pub adopt_components: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub asset_tag: ::std::option::Option<WritableModuleRequestAssetTag>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -222962,6 +228998,9 @@ pub struct WritableModuleRequest {
     pub module_type: WritableModuleRequestModuleType,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<WritableModuleRequestOwner>,
+    ///Automatically populate components associated with this module type (default: true)
+    #[serde(default = "defaults::default_bool::<true>")]
+    pub replicate_components: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub serial: ::std::option::Option<SerialNumber>,
     #[doc = "* `offline` - Offline\n* `active` - Active\n* `planned` - Planned\n* `staged` - Staged\n* `failed` - Failed\n* `decommissioning` - Decommissioning"]
@@ -227808,6 +233847,34 @@ for WritablePrefixRequestVrf {
 ///        }
 ///      ]
 ///    },
+///    "group": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefRackGroupRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
 ///    "location": {
 ///      "anyOf": [
 ///        {
@@ -228121,6 +234188,8 @@ pub struct WritableRackRequest {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form_factor: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub group: ::std::option::Option<WritableRackRequestGroup>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub location: ::std::option::Option<WritableRackRequestLocation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_weight: ::std::option::Option<i64>,
@@ -228385,6 +234454,51 @@ impl<'de> ::serde::Deserialize<'de> for WritableRackRequestFacilityId {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`WritableRackRequestGroup`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefRackGroupRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum WritableRackRequestGroup {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefRackGroupRequest>),
+}
+impl ::std::convert::From<i64> for WritableRackRequestGroup {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefRackGroupRequest>>
+for WritableRackRequestGroup {
+    fn from(value: ::std::option::Option<BriefRackGroupRequest>) -> Self {
+        Self::Variant1(value)
     }
 }
 ///`WritableRackRequestLocation`
@@ -236211,6 +242325,34 @@ for WritableVirtualDeviceContextRequestTenant {
 ///          "type": "null"
 ///        }
 ///      ]
+///    },
+///    "virtual_machine_type": {
+///      "anyOf": [
+///        {
+///          "oneOf": [
+///            {
+///              "type": "integer"
+///            },
+///            {
+///              "anyOf": [
+///                {
+///                  "allOf": [
+///                    {
+///                      "$ref": "#/definitions/BriefVirtualMachineTypeRequest"
+///                    }
+///                  ]
+///                },
+///                {
+///                  "type": "null"
+///                }
+///              ]
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    }
 ///  }
 ///}
@@ -236281,6 +242423,10 @@ pub struct WritableVirtualMachineWithConfigContextRequest {
     >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub vcpus: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_machine_type: ::std::option::Option<
+        WritableVirtualMachineWithConfigContextRequestVirtualMachineType,
+    >,
 }
 ///`WritableVirtualMachineWithConfigContextRequestCluster`
 ///
@@ -236894,6 +243040,52 @@ impl ::std::convert::From<i64> for WritableVirtualMachineWithConfigContextReques
 impl ::std::convert::From<::std::option::Option<BriefTenantRequest>>
 for WritableVirtualMachineWithConfigContextRequestTenant {
     fn from(value: ::std::option::Option<BriefTenantRequest>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`WritableVirtualMachineWithConfigContextRequestVirtualMachineType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "integer"
+///    },
+///    {
+///      "anyOf": [
+///        {
+///          "allOf": [
+///            {
+///              "$ref": "#/definitions/BriefVirtualMachineTypeRequest"
+///            }
+///          ]
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum WritableVirtualMachineWithConfigContextRequestVirtualMachineType {
+    Variant0(i64),
+    Variant1(::std::option::Option<BriefVirtualMachineTypeRequest>),
+}
+impl ::std::convert::From<i64>
+for WritableVirtualMachineWithConfigContextRequestVirtualMachineType {
+    fn from(value: i64) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<::std::option::Option<BriefVirtualMachineTypeRequest>>
+for WritableVirtualMachineWithConfigContextRequestVirtualMachineType {
+    fn from(value: ::std::option::Option<BriefVirtualMachineTypeRequest>) -> Self {
         Self::Variant1(value)
     }
 }
@@ -239741,6 +245933,9 @@ for WritableWirelessLinkRequestTenant {
 }
 /// Generation of default values for serde.
 pub mod defaults {
+    pub(super) fn default_bool<const V: bool>() -> bool {
+        V
+    }
     pub(super) fn default_i64<T, const V: i64>() -> T
     where
         T: ::std::convert::TryFrom<i64>,
@@ -239770,6 +245965,9 @@ pub mod defaults {
     pub(super) fn patched_provider_account_request_name() -> super::PatchedProviderAccountRequestName {
         super::PatchedProviderAccountRequestName("".to_string())
     }
+    pub(super) fn patched_script_input_request_notifications() -> ::std::string::String {
+        "always".to_string()
+    }
     pub(super) fn patched_writable_device_type_request_u_height() -> f64 {
         1.0_f64
     }
@@ -239778,6 +245976,9 @@ pub mod defaults {
     }
     pub(super) fn provider_account_request_name() -> super::ProviderAccountRequestName {
         super::ProviderAccountRequestName("".to_string())
+    }
+    pub(super) fn script_input_request_notifications() -> ::std::string::String {
+        "always".to_string()
     }
     pub(super) fn writable_device_type_request_u_height() -> f64 {
         1.0_f64

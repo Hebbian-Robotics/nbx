@@ -28,8 +28,8 @@ jobs:
         # GitHub tag. Advance to [<current pin>, <previous>] once the image
         # is on Docker Hub.
         netbox-version:
+          - v4.6.0
           - v4.5.10
-          - v4.5.9
     env:
       NETBOX_VERSION: ${{ matrix.netbox-version }}
     steps:

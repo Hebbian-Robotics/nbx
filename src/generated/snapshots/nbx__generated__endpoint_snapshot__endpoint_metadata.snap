@@ -1,5 +1,6 @@
 ---
 source: src/generated/endpoint_snapshot.rs
+assertion_line: 68
 expression: snapshots
 ---
 - operation_id: authentication_check_retrieve
@@ -21,6 +22,18 @@ expression: snapshots
   method: GET
   path: /api/dcim/cables/
   parameters:
+    - name: bundle
+      location: query
+      required: false
+    - name: bundle__n
+      location: query
+      required: false
+    - name: bundle_id
+      location: query
+      required: false
+    - name: bundle_id__n
+      location: query
+      required: false
     - name: circuittermination_id
       location: query
       required: false
@@ -391,6 +404,9 @@ expression: snapshots
       location: query
       required: false
     - name: site_id
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: status
@@ -882,6 +898,9 @@ expression: snapshots
       location: query
       required: false
     - name: slug__regex
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: tag
@@ -1556,6 +1575,9 @@ expression: snapshots
       location: query
       required: false
     - name: slug__regex
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: subdevice_role
@@ -2634,6 +2656,9 @@ expression: snapshots
     - name: site_id__n
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: status
       location: query
       required: false
@@ -3671,6 +3696,9 @@ expression: snapshots
     - name: speed__n
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -4496,6 +4524,9 @@ expression: snapshots
     - name: site_id__n
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: status
       location: query
       required: false
@@ -4975,6 +5006,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: status
       location: query
       required: false
@@ -5355,6 +5389,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -5699,6 +5736,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -6014,6 +6054,18 @@ expression: snapshots
       location: query
       required: false
     - name: form_factor__regex
+      location: query
+      required: false
+    - name: group
+      location: query
+      required: false
+    - name: group__n
+      location: query
+      required: false
+    - name: group_id
+      location: query
+      required: false
+    - name: group_id__n
       location: query
       required: false
     - name: id
@@ -6401,6 +6453,9 @@ expression: snapshots
       location: query
       required: false
     - name: site_id__n
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: starting_unit
@@ -6945,6 +7000,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -7284,6 +7342,9 @@ expression: snapshots
       location: query
       required: false
     - name: slug__regex
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: tag
@@ -7718,6 +7779,9 @@ expression: snapshots
       location: query
       required: false
     - name: slug__regex
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: status
@@ -8172,6 +8236,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: updated_by_request
       location: query
       required: false
@@ -8457,6 +8524,9 @@ expression: snapshots
       location: query
       required: false
     - name: rir_id__n
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: tag
@@ -8891,6 +8961,9 @@ expression: snapshots
       location: query
       required: false
     - name: service_id__n
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: status
@@ -9384,6 +9457,9 @@ expression: snapshots
     - name: site_id__n
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: status
       location: query
       required: false
@@ -9848,6 +9924,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -10147,6 +10226,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -10443,6 +10525,9 @@ expression: snapshots
     - name: rack
       location: query
       required: false
+    - name: rack_group
+      location: query
+      required: false
     - name: region
       location: query
       required: false
@@ -10518,6 +10603,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -10552,6 +10640,27 @@ expression: snapshots
       location: query
       required: false
     - name: tenant_id__n
+      location: query
+      required: false
+    - name: total_vlan_ids
+      location: query
+      required: false
+    - name: total_vlan_ids__empty
+      location: query
+      required: false
+    - name: total_vlan_ids__gt
+      location: query
+      required: false
+    - name: total_vlan_ids__gte
+      location: query
+      required: false
+    - name: total_vlan_ids__lt
+      location: query
+      required: false
+    - name: total_vlan_ids__lte
+      location: query
+      required: false
+    - name: total_vlan_ids__n
       location: query
       required: false
     - name: updated_by_request
@@ -10950,6 +11059,9 @@ expression: snapshots
       location: query
       required: false
     - name: site_id__n
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: status
@@ -11365,6 +11477,9 @@ expression: snapshots
     - name: rd__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -11719,6 +11834,9 @@ expression: snapshots
     - name: slug__regex
       location: query
       required: false
+    - name: start
+      location: query
+      required: false
     - name: tag
       location: query
       required: false
@@ -12046,6 +12164,9 @@ expression: snapshots
       location: query
       required: false
     - name: slug__regex
+      location: query
+      required: false
+    - name: start
       location: query
       required: false
     - name: tag

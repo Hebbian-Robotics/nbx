@@ -1,5 +1,5 @@
-// AUTO-GENERATED. Source: schema/netbox-4.5.10.json :: WritableCableRequest
-// Run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/` to regenerate.
+// AUTO-GENERATED. Source: schema/netbox-4.6.0.json :: WritableCableRequest
+// Run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/` to regenerate.
 
 use clap::Args;
 use clap::ValueEnum;
@@ -205,6 +205,9 @@ pub enum CableType {
 #[derive(Debug, Args)]
 pub struct CableCreateArgs {
     #[arg(long)]
+    pub bundle: Option<u64>,
+
+    #[arg(long)]
     pub color: Option<String>,
 
     #[arg(long)]
@@ -323,6 +326,9 @@ pub struct CableUpdateArgs {
     /// Override the default lookup field.
     #[arg(long)]
     pub lookup_field: Option<String>,
+
+    #[arg(long)]
+    pub bundle: Option<u64>,
 
     #[arg(long)]
     pub color: Option<String>,
@@ -476,6 +482,9 @@ async fn create_body(args: CableCreateArgs, opts: &GlobalOptions) -> NbxResult<V
         .unwrap_or_else(|| json!({}));
     let object: &mut Map<String, Value> = body.as_object_mut()
         .ok_or_else(|| NbxError::validation("mutation payload must be a JSON object", json!({})))?;
+    if let Some(v) = args.bundle {
+        object.insert("bundle".to_owned(), json!(v));
+    }
     insert_optional_string_field(object, "color", args.color);
     insert_optional_string_field(object, "comments", args.comments);
     insert_optional_string_field(object, "description", args.description);
@@ -513,6 +522,9 @@ async fn update_body(args: CableUpdateArgs, opts: &GlobalOptions) -> NbxResult<V
         .unwrap_or_else(|| json!({}));
     let object: &mut Map<String, Value> = body.as_object_mut()
         .ok_or_else(|| NbxError::validation("mutation payload must be a JSON object", json!({})))?;
+    if let Some(v) = args.bundle {
+        object.insert("bundle".to_owned(), json!(v));
+    }
     insert_optional_string_field(object, "color", args.color);
     insert_optional_string_field(object, "comments", args.comments);
     insert_optional_string_field(object, "description", args.description);

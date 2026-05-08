@@ -2754,7 +2754,7 @@ mod tests {
         Mock::given(method_matcher("GET"))
             .and(path_matcher("/api/status/"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
-                "netbox-version": "4.5.10",
+                "netbox-version": "4.6.0",
             })))
             .expect(1)
             .mount(&server)

@@ -1,7 +1,7 @@
 [package]
 name = "nbx-codegen"
 # Stays in lockstep with the parent nbx crate (which tracks NetBox).
-version = "4.5.10"
+version = "4.6.0"
 edition = "2024"
 description = "Internal codegen helpers for the nbx CLI. Not published to crates.io."
 license = "Apache-2.0"

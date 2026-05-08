@@ -1,4 +1,4 @@
-// AUTO-GENERATED. Run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/`.
+// AUTO-GENERATED. Run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/`.
 
 #[rustfmt::skip]
 pub mod sites;

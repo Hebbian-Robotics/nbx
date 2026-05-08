@@ -19,7 +19,7 @@ name = "nbx"
 # default in `tests/integration/`. The output envelope's `nbxVersion` field
 # is `env!("CARGO_PKG_VERSION")`, and `client::TARGET_NETBOX_VERSION` is
 # derived from the same constant.
-version = "4.5.10"
+version = "4.6.0"
 edition = "2024"
 default-run = "nbx"
 description = "A NetBox CLI for humans and AI agents. Single static binary, schema-driven typed flags, versioned JSON output envelope, agent skill files."

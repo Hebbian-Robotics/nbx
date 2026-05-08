@@ -15,6 +15,9 @@ The pinned OpenAPI document goes through `normalize_openapi_schema` (`xtask/code
 - **`exclusiveMaximum` / `exclusiveMinimum` flag form → JSON Schema 7 boundary form.** OpenAPI 3.0 has them as booleans; JSON Schema expects them as numbers.
 - **`enum` arrays containing `null`** become nullable, with the `null` entry dropped.
 - **`discriminator`, `example`, `externalDocs`, `readOnly`, `writeOnly`, `xml`, `x-spec-enum-id`** are stripped — typify doesn't consume them and they would otherwise pollute the output.
+- **Known-incorrect `required` entries are stripped.** NetBox occasionally publishes OpenAPI declarations where a `Brief*` schema lists an aggregate `*_count` field as required, while the runtime brief serializer omits it. `KNOWN_OVER_REQUIRED` in `xtask/codegen/src/lib.rs` enumerates these; each entry is verified by `tests/integration/run.sh` failing on a real response when the override is missing. Remove an entry when the upstream release stops shipping the bad declaration — the unit test `known_over_required_overrides_target_real_schemas` catches silent renames or upstream fixes that would make an entry a no-op.
+
+  Audit gap: `Brief*` variants embedded only by NetBox apps that the integration fixture in `tests/integration/run.sh` does not seed (`circuits`, `virtualization`, `wireless`, `vpn`) are not exercised by the audit. New entries in those areas should be reproduced manually before being added.
 
 ## Variant ident handling for enum properties
 

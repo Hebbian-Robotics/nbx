@@ -1,5 +1,5 @@
-// AUTO-GENERATED. Source: schema/netbox-4.5.10.json :: WritableInterfaceRequest
-// Run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/` to regenerate.
+// AUTO-GENERATED. Source: schema/netbox-4.6.0.json :: WritableInterfaceRequest
+// Run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/` to regenerate.
 
 use clap::Args;
 use clap::ValueEnum;

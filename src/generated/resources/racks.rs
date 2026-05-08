@@ -1,5 +1,5 @@
-// AUTO-GENERATED. Source: schema/netbox-4.5.10.json :: WritableRackRequest
-// Run `cargo run -p nbx-codegen -- schema/netbox-4.5.10.json src/generated/resources/` to regenerate.
+// AUTO-GENERATED. Source: schema/netbox-4.6.0.json :: WritableRackRequest
+// Run `cargo run -p nbx-codegen -- schema/netbox-4.6.0.json src/generated/resources/` to regenerate.
 
 use clap::Args;
 use clap::ValueEnum;
@@ -124,6 +124,9 @@ pub struct RackCreateArgs {
     /// * `wall-cabinet-vertical` - Wall-mounted cabinet (vertical)
     #[arg(long)]
     pub form_factor: Option<RackFormFactor>,
+
+    #[arg(long)]
+    pub group: Option<u64>,
 
     #[arg(long)]
     pub location: Option<String>,
@@ -260,6 +263,9 @@ pub struct RackUpdateArgs {
     /// * `wall-cabinet-vertical` - Wall-mounted cabinet (vertical)
     #[arg(long)]
     pub form_factor: Option<RackFormFactor>,
+
+    #[arg(long)]
+    pub group: Option<u64>,
 
     #[arg(long)]
     pub location: Option<String>,
@@ -408,6 +414,9 @@ async fn create_body(args: RackCreateArgs, opts: &GlobalOptions) -> NbxResult<Va
     if let Some(v) = args.form_factor {
         object.insert("form_factor".to_owned(), json!(v));
     }
+    if let Some(v) = args.group {
+        object.insert("group".to_owned(), json!(v));
+    }
     if let Some(v) = args.location {
         object.insert("location".to_owned(), crate::commands::resolve_reference_id("/api/dcim/locations/", "slug", &v, opts).await?);
     }
@@ -484,6 +493,9 @@ async fn update_body(args: RackUpdateArgs, opts: &GlobalOptions) -> NbxResult<Va
     insert_optional_string_field(object, "facility_id", args.facility_id);
     if let Some(v) = args.form_factor {
         object.insert("form_factor".to_owned(), json!(v));
+    }
+    if let Some(v) = args.group {
+        object.insert("group".to_owned(), json!(v));
     }
     if let Some(v) = args.location {
         object.insert("location".to_owned(), crate::commands::resolve_reference_id("/api/dcim/locations/", "slug", &v, opts).await?);
