@@ -31,6 +31,20 @@ license = "Apache-2.0"
 keywords = ["netbox", "cli", "dcim", "ipam", "agent"]
 categories = ["command-line-utilities", "api-bindings", "network-programming"]
 
+# `cargo binstall nbx` resolves prebuilt binaries from the release artifacts
+# produced by `.github/workflows/release.yml` (5 targets, archived as
+# `nbx-<version>-<target>.{tar.gz,zip}` with the binary at the archive root
+# under a versioned directory). Without this metadata binstall falls back to
+# `cargo install`, which compiles from source — slow because typify-generated
+# `src/generated/types.rs` is ~7 MB.
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ version }-{ target }{ archive-suffix }"
+pkg-fmt = "tgz"
+bin-dir = "{ name }-{ version }-{ target }/{ bin }{ binary-ext }"
+
+[package.metadata.binstall.overrides.x86_64-pc-windows-msvc]
+pkg-fmt = "zip"
+
 [lints]
 workspace = true
 

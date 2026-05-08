@@ -17,13 +17,37 @@ Target NetBox release: **v4.6.0**.
 
 ## Install
 
+Prebuilt binaries for Linux (x86_64, aarch64), macOS (Intel, Apple Silicon), and Windows (x86_64-msvc) are attached to each GitHub Release by `.github/workflows/release.yml`.
+
+### `cargo binstall` (recommended)
+
+```sh
+cargo install cargo-binstall   # one-time bootstrap
+cargo binstall nbx
+```
+
+Resolves the right prebuilt archive from the [latest GitHub Release](https://github.com/Hebbian-Robotics/nbx/releases/latest) for your platform via `[package.metadata.binstall]` in `Cargo.toml`. No compilation. Sub-second install on a warm machine.
+
+### Direct download
+
+Grab the archive for your platform from the [latest release](https://github.com/Hebbian-Robotics/nbx/releases/latest), unpack it, and put `nbx` on your `$PATH`. Each release ships:
+
+- `nbx-<version>-x86_64-unknown-linux-gnu.tar.gz`
+- `nbx-<version>-aarch64-unknown-linux-gnu.tar.gz`
+- `nbx-<version>-x86_64-apple-darwin.tar.gz`
+- `nbx-<version>-aarch64-apple-darwin.tar.gz`
+- `nbx-<version>-x86_64-pc-windows-msvc.zip`
+- `SHA256SUMS` — verify with `shasum -a 256 -c SHA256SUMS`
+
+### From crates.io source
+
 ```sh
 cargo install nbx
 ```
 
-Prebuilt binaries for Linux (x86_64, aarch64), macOS (Intel, Apple Silicon), and Windows (x86_64-msvc) are attached to each GitHub Release by `.github/workflows/release.yml`.
+Compiles the published source locally. Slower (minutes on a cold target dir) because typify-generated `src/generated/types.rs` is large and the dependency graph (reqwest, tokio, clap, …) gets built in release mode. Use this when no prebuilt suits your platform or you specifically want a from-source build.
 
-From source:
+### Local development build
 
 ```sh
 cargo build --release
